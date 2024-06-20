@@ -1,10 +1,9 @@
 /** @format */
 import React from "react";
-import { Avatar, Button, Col, Row } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import UpdateProfile from "./UpdateProfileForm";
-import { logout } from "@/app/lib/authenticate";
 
 export default function VendorProfilePage() {
   return (
@@ -21,13 +20,6 @@ export default function VendorProfilePage() {
               </Title>
             </div>
             <UpdateProfile />
-            <form action={logout}>
-              <div className='text-right'>
-                <Button type='primary' htmlType='submit' danger>
-                  Check Out
-                </Button>
-              </div>
-            </form>
           </div>
         </Col>
         <Col span={8}>

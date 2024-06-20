@@ -5,8 +5,8 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Button, Form, Input, message } from "antd";
-import { setCookie } from "typescript-cookie";
 import Title from "antd/es/typography/Title";
+import { setCookie } from "typescript-cookie";
 
 type FieldType = {
   username?: string;
@@ -27,7 +27,7 @@ export default function SignInForm({ authenticate }: any) {
       message.success(response.message);
 
       setCookie("Authenticate", JSON.stringify(response.session));
-
+    
       setTimeout(() => {
         router.push(response.path);
       }, 2000);

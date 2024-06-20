@@ -2,10 +2,8 @@
 
 "use server";
 
-
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { createSession, deleteSession } from "./session";
+import { createSession } from "./session";
 
 const fs = require("fs");
 
@@ -56,9 +54,15 @@ export async function logout() {
     );
 
     cookies().delete("Authenticate");
-    redirect("/signin");
+    return {
+      status: 200,
+      message: "Sign Out Successful",
+      path: "/signin",
+    }; 
   } else {
-    console.log("Not found session");
-    return;
+    return {
+      status: 400,
+      message: "Sign Out Unsuccessful",
+    }; 
   }
 }

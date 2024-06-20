@@ -1,32 +1,41 @@
 /** @format */
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu } from "antd";
+import type { MenuProps } from "antd";
+import { Menu, message } from "antd";
 import {
   HomeOutlined,
   LoginOutlined,
+  LogoutOutlined,
   ProductOutlined,
   ProfileOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { getCookie } from "typescript-cookie";
+import LogoutButton from "./LogoutButton";
+import { logout } from "@/app/lib/authenticate";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
+
   const [cookie, setCookie] = useState<any>(null);
-  const [current, setCurrent] = useState<string>("signin");
+  const [current, setCurrent] = useState<string>(
+    cookie !== null ? "dashboard" : "signin"
+  );
 
   useEffect(() => {
     if (typeof document !== "undefined") {
       let authenCookie: any = getCookie("Authenticate");
       authenCookie = authenCookie ? JSON.parse(authenCookie) : null;
+
       setCookie(authenCookie);
-      setCurrent(authenCookie !== null ? "dashboard" : "signin");
     }
   }, []);
 
-
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       key: "account",
       label: "User Account",
@@ -42,6 +51,11 @@ const MenuItems: React.FC = () => {
                   key: "vendorProfile",
                   label: <Link href={"/vendorProfile"}>Vendor Profile</Link>,
                   icon: <ProfileOutlined />,
+                },
+                {
+                  key: "signout",
+                  label: <LogoutButton logout={logout}/>,
+                  icon: <LogoutOutlined />,
                 },
               ],
             }
@@ -62,17 +76,18 @@ const MenuItems: React.FC = () => {
       label: <Link href={"/product"}>Product</Link>,
       icon: <ProductOutlined />,
     },
-  ]
+  ];
 
-  const onClick = (e) => {
+  const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
   return (
     <Menu
       onClick={onClick}
-      theme='dark'
-      mode='inline'
+      theme="dark"
+      mode="inline"
       selectedKeys={[current]}
+      defaultSelectedKeys={[current]}
       items={menuItems}
     />
   );

@@ -1,13 +1,14 @@
 /** @format */
 "use client";
+import { useState } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Button, Layout, theme } from "antd";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import MenuItems from "@/components/MenuItems";
 import "./_styles/globals.css";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { useState } from "react";
+
 const { Content, Footer, Sider, Header } = Layout;
 
 const inter = Inter({ subsets: ["latin"] });
