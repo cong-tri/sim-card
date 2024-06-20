@@ -20,7 +20,6 @@ import { logout } from "@/app/lib/authenticate";
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
-
   const [cookie, setCookie] = useState<any>(null);
   const [current, setCurrent] = useState<string>(
     cookie !== null ? "dashboard" : "signin"
@@ -43,7 +42,6 @@ const MenuItems: React.FC = () => {
       children: [
         cookie
           ? {
-              key: "setting",
               label: "Settings",
               type: "group",
               children: [
@@ -54,7 +52,7 @@ const MenuItems: React.FC = () => {
                 },
                 {
                   key: "signout",
-                  label: <LogoutButton logout={logout}/>,
+                  label: <LogoutButton logout={logout} />,
                   icon: <LogoutOutlined />,
                 },
               ],
@@ -78,9 +76,7 @@ const MenuItems: React.FC = () => {
     },
   ];
 
-  const onClick: MenuProps["onClick"] = (e) => {
-    setCurrent(e.key);
-  };
+  const onClick: MenuProps["onClick"] = (e) => setCurrent(e.key);
   return (
     <Menu
       onClick={onClick}

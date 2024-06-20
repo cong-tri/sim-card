@@ -20,19 +20,19 @@ export default function SignInForm({ authenticate }: any) {
 
   const onFinish = async (values: any) => {
     const { username, password } = values;
-    const response = await authenticate(username, password);
+    const response:any = await authenticate(username, password);
     console.log(response);
 
-    if (response.status == 200) {
-      message.success(response.message);
+    if (response?.status == 200) {
+      message.success(response?.message);
 
-      setCookie("Authenticate", JSON.stringify(response.session));
+      setCookie("Authenticate", JSON.stringify(response?.session));
     
       setTimeout(() => {
-        router.push(response.path);
+        router.push(response?.path);
       }, 2000);
     } else {
-      message.error(response.message);
+      message.error(response?.message);
       return;
     }
   };
