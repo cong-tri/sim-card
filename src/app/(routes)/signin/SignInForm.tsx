@@ -23,16 +23,16 @@ export default function SignInForm({ authenticate }: any) {
     const response:any = await authenticate(username, password);
     console.log(response);
 
-    if (response?.status == 200) {
-      message.success(response?.message);
+    if (response.status == 200) {
+      message.success(response.message);
 
-      setCookie("Authenticate", JSON.stringify(response?.session));
+      setCookie("Authenticate", JSON.stringify(response.session));
     
       setTimeout(() => {
-        router.push(response?.path);
-      }, 2000);
+        router.push(response.path);
+      }, 1000);
     } else {
-      message.error(response?.message);
+      message.error(response.message);
       return;
     }
   };

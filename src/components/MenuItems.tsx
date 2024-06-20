@@ -16,6 +16,7 @@ import {
 import { getCookie } from "typescript-cookie";
 import LogoutButton from "./LogoutButton";
 import { logout } from "@/app/lib/authenticate";
+import { useRouter } from "next/navigation";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -24,6 +25,7 @@ const MenuItems: React.FC = () => {
   const [current, setCurrent] = useState<string>(
     cookie !== null ? "dashboard" : "signin"
   );
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -33,6 +35,25 @@ const MenuItems: React.FC = () => {
       setCookie(authenCookie);
     }
   }, []);
+
+  const logoutAction = async () => {
+    const result: any = await logout();
+    console.log(result);
+
+    if (result.status === 200) {
+      message.success(result.message);
+
+      setCookie(null);
+      setCurrent("signin")
+
+      setTimeout(() => {
+        router.push(result.path);
+      }, 2000);
+    } else {
+      message.error(result.message);
+      return
+    }
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -52,7 +73,7 @@ const MenuItems: React.FC = () => {
                 },
                 {
                   key: "signout",
-                  label: <LogoutButton logout={logout} />,
+                  label: <LogoutButton logoutAction={logoutAction} />,
                   icon: <LogoutOutlined />,
                 },
               ],
