@@ -4,9 +4,9 @@ import React from "react";
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
+  Rectangle,
   CartesianGrid,
   Tooltip,
   Legend,
@@ -50,10 +50,10 @@ export default function WebsiteViewsChart() {
       data={data}
       className='border-b border-gray-400 pb-4'
       style={{ margin: "20px auto" }}>
-      <CartesianGrid stroke='#ccc' strokeDasharray='3 3' />
+      <CartesianGrid strokeDasharray='3 3' />
       <XAxis dataKey='name' />
       <YAxis />
-      <Bar dataKey='views' fill='#80C4E9' />
+      <Bar dataKey='views' fill="#80C4E9" activeBar={<Rectangle fill="pink" stroke="blue" />}/>
       <Tooltip />
       <Legend />
     </BarChart>

@@ -36,11 +36,6 @@ export default function RootLayout({
               collapsible
               collapsed={collapsed}
               breakpoint='lg'
-              // collapsedWidth='0'
-              // onBreakpoint={(broken) => {}}
-              // onCollapse={(collapsed, type) => {
-              //   console.log(collapsed, type);
-              // }}
             >
               <div className='demo-logo-vertical' />
               <MenuItems />

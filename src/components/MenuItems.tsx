@@ -1,9 +1,8 @@
 /** @format */
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu } from "antd";
-import type { MenuProps } from "antd";
 import {
   HomeOutlined,
   LoginOutlined,
@@ -13,13 +12,21 @@ import {
 } from "@ant-design/icons";
 import { getCookie } from "typescript-cookie";
 
-type MenuItem = Required<MenuProps>["items"][number];
-
 const MenuItems: React.FC = () => {
-  let cookie: any = getCookie("Authenticate");
-  cookie = cookie ? JSON.parse(cookie) : null;
+  const [cookie, setCookie] = useState<any>(null);
+  const [current, setCurrent] = useState<string>("signin");
 
-  const menuItems: MenuItem[] = [
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      let authenCookie: any = getCookie("Authenticate");
+      authenCookie = authenCookie ? JSON.parse(authenCookie) : null;
+      setCookie(authenCookie);
+      setCurrent(authenCookie !== null ? "dashboard" : "signin");
+    }
+  }, []);
+
+
+  const menuItems = [
     {
       key: "account",
       label: "User Account",
@@ -55,15 +62,11 @@ const MenuItems: React.FC = () => {
       label: <Link href={"/product"}>Product</Link>,
       icon: <ProductOutlined />,
     },
-  ];
+  ]
 
-  const onClick: MenuProps["onClick"] = (e) => {
+  const onClick = (e) => {
     setCurrent(e.key);
   };
-  const [current, setCurrent] = useState(
-    cookie !== null ? "dashboard" : "signin"
-  );
-
   return (
     <Menu
       onClick={onClick}
