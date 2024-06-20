@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 import { Menu, message } from "antd";
@@ -14,17 +15,15 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { getCookie } from "typescript-cookie";
-import LogoutButton from "./LogoutButton";
 import { logout } from "@/app/lib/authenticate";
-import { useRouter } from "next/navigation";
+import LogoutButton from "./LogoutButton";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
   const [cookie, setCookie] = useState<any>(null);
-  const [current, setCurrent] = useState<string>(
-    cookie !== null ? "dashboard" : "signin"
-  );
+  const [current, setCurrent] = useState<string>("signin");
+
   const router = useRouter();
 
   useEffect(() => {
@@ -33,6 +32,7 @@ const MenuItems: React.FC = () => {
       authenCookie = authenCookie ? JSON.parse(authenCookie) : null;
 
       setCookie(authenCookie);
+      setCurrent(authenCookie !== null ? "dashboard" : "signin");
     }
   }, []);
 
@@ -44,14 +44,14 @@ const MenuItems: React.FC = () => {
       message.success(result.message);
 
       setCookie(null);
-      setCurrent("signin")
+      setCurrent("signin");
 
       setTimeout(() => {
         router.push(result.path);
       }, 2000);
     } else {
       message.error(result.message);
-      return
+      return;
     }
   };
 
