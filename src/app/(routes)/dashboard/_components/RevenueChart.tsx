@@ -9,7 +9,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "../../../../../assets/recharts/src";
+} from "recharts";
 
 export default function RevenueChart() {
   const data = [

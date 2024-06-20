@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-} from "../../../../../assets/recharts/src";
+} from "recharts";
 const data = [
   {
     age: "16-20",
