@@ -7,7 +7,7 @@ export default function LogoutButton({ logout }: any) {
   const router = useRouter();
 
   const logoutAction = async () => {
-    const result = await logout();
+    const result: any = await logout();
     console.log(result);
 
     if (result.status === 200) {
