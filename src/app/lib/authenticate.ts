@@ -20,11 +20,11 @@ export async function authenticate(username: string, password: string) {
     const token: string = `Authorize Successfully ${sessionID}`;
 
     createSession(sessionID, token);
-
+    
     return {
       status: 200,
       message: "Successful",
-      path: "/dashboard",
+      path: "/main/dashboard",
       session: {
         sessionID,
         token,
@@ -57,7 +57,7 @@ export async function logout() {
     return {
       status: 200,
       message: "Sign Out Successful",
-      path: "/signin",
+      path: "/main/signin",
     }; 
   } else {
     return {

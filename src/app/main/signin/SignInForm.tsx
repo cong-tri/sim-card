@@ -22,7 +22,6 @@ export default function SignInForm({ authenticate }: any) {
     const { username, password } = values;
     try {
       const response: any = await authenticate(username, password);
-      console.log(response);
 
       if (response.status == 200) {
         message.success(response.message);

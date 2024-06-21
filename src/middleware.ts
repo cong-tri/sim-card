@@ -5,7 +5,7 @@ import { getSession } from "./app/lib/session";
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/main/dashboard", request.url));
   }
   const listSession: any = await getSession();
 
@@ -27,14 +27,14 @@ export async function middleware(request: NextRequest) {
     config.matcher.includes(request.nextUrl.pathname) &&
     validByCookie === false
   ) {
-    return NextResponse.redirect(new URL("/signin", request.url));
+    return NextResponse.redirect(new URL("/main/signin", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/dashboard", "/vendorProfile", "/product"],
+  matcher: ["/", "/main/dashboard", "/main/vendorProfile", "/main/product"],
 };
 
 // for compare 2 token by cookie

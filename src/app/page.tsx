@@ -3,7 +3,7 @@
 export default function Home() {
   return (
     <main>
-      <div>Main Page</div>
+      <div>Home Page</div>
     </main>
   );
 }

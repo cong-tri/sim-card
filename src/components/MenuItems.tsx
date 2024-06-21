@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 import { Menu, message } from "antd";
@@ -25,6 +25,7 @@ const MenuItems: React.FC = () => {
   const [current, setCurrent] = useState<string>("signin");
 
   const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -33,8 +34,10 @@ const MenuItems: React.FC = () => {
 
       setCookie(authenCookie);
       setCurrent(authenCookie !== null ? "dashboard" : "signin");
+
+      router.prefetch(pathName);
     }
-  }, []);
+  }, [router, pathName]);
 
   const logoutAction = async () => {
     const result: any = await logout();
@@ -48,7 +51,7 @@ const MenuItems: React.FC = () => {
 
       setTimeout(() => {
         router.push(result.path);
-      }, 2000);
+      }, 3000);
     } else {
       message.error(result.message);
       return;
@@ -68,7 +71,9 @@ const MenuItems: React.FC = () => {
               children: [
                 {
                   key: "vendorProfile",
-                  label: <Link href={"/vendorProfile"}>Vendor Profile</Link>,
+                  label: (
+                    <Link href={"/main/vendorProfile"}>Vendor Profile</Link>
+                  ),
                   icon: <ProfileOutlined />,
                 },
                 {
@@ -80,31 +85,32 @@ const MenuItems: React.FC = () => {
             }
           : {
               key: "signin",
-              label: <Link href={"/signin"}>Sign In</Link>,
+              label: <Link href={"/main/signin"}>Sign In</Link>,
               icon: <LoginOutlined />,
             },
       ],
     },
     {
       key: "dashboard",
-      label: <Link href={"/dashboard"}>DashBoard</Link>,
+      label: <Link href={"/main/dashboard"}>DashBoard</Link>,
       icon: <HomeOutlined />,
     },
     {
       key: "product",
-      label: <Link href={"/product"}>Product</Link>,
+      label: <Link href={"/main/product"}>Product</Link>,
       icon: <ProductOutlined />,
     },
   ];
 
-  const onClick: MenuProps["onClick"] = (e) => setCurrent(e.key);
+  const onClick: MenuProps["onClick"] = (e) => {    
+    setCurrent(e.key);
+  };
   return (
     <Menu
       onClick={onClick}
       theme="dark"
       mode="inline"
       selectedKeys={[current]}
-      defaultSelectedKeys={[current]}
       items={menuItems}
     />
   );
