@@ -54,6 +54,7 @@ export default function SignInForm({ authenticate }: any) {
           name="username"
           style={{ width: "100%" }}
           rules={[{ required: true, message: "Please input your username!" }]}
+          initialValue={"congtri"}
         >
           <Input placeholder="congtri" size="large" />
         </Form.Item>
@@ -62,6 +63,7 @@ export default function SignInForm({ authenticate }: any) {
         <Form.Item<FieldType>
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
+          initialValue={"12345"}
         >
           <Input.Password placeholder="12345" size="large" />
         </Form.Item>
