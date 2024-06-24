@@ -1,14 +1,19 @@
 /** @format */
 
 import { type NextRequest, NextResponse } from "next/server";
+import { runWithAmplifyServerContext } from "./amplify/utils/amplifyServerUtils";
+import { fetchAuthSession } from "aws-amplify/auth/server";
 import { getSession } from "./app/lib/session";
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/") {
     return NextResponse.redirect(new URL("/main/dashboard", request.url));
   }
-  const listSession: any = await getSession();
 
+  const response = NextResponse.next();
+
+  const listSession: any = await getSession();
+  
   let cookieByClient: any = request.cookies.get("Authenticate")?.value;
   cookieByClient = cookieByClient ? JSON.parse(cookieByClient) : {};
 
@@ -23,14 +28,34 @@ export async function middleware(request: NextRequest) {
     cookieByClient !== undefined ? cookieByClient : {}     
   );
   
-  if (
+  const authenticated = await runWithAmplifyServerContext({
+    nextServerContext: { request, response },
+    operation: async (contextSpec) => {
+      try {
+        const session = await fetchAuthSession(contextSpec);
+
+        return (
+          session.tokens?.accessToken !== undefined &&
+          session.tokens?.idToken !== undefined
+        );
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    }
+  });
+
+  if (!authenticated){
+    return NextResponse.redirect(new URL("/main/signin", request.url));
+  };
+
+ if (
     config.matcher.includes(request.nextUrl.pathname) &&
     validByCookie === false
   ) {
     return NextResponse.redirect(new URL("/main/signin", request.url));
   }
-
-  return NextResponse.next();
+  return response
 }
 
 export const config = {

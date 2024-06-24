@@ -7,6 +7,11 @@ import { useRouter } from "next/navigation";
 import { Button, Form, Input, message } from "antd";
 import Title from "antd/es/typography/Title";
 import { setCookie } from "typescript-cookie";
+import { Amplify } from "aws-amplify";
+import { SignInInput, getCurrentUser, signIn } from "aws-amplify/auth";
+import { authConfig } from "@/amplify/auth/amplifyConvider";
+
+Amplify.configure({ Auth: authConfig });
 
 type FieldType = {
   username?: string;
@@ -14,32 +19,40 @@ type FieldType = {
   remember?: string;
 };
 
-export default function SignInForm({ authenticate }: any) {
+export default function SignInForm({ getUserToStoreSession }: any) {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  const onFinish = async (values: any) => {
-    const { username, password } = values;
+  const onFinish = async ({ username, password }: SignInInput) => {
     try {
-      const response: any = await authenticate(username, password);
+      const response = await signIn({
+        username,
+        password,
+      });
+      if (
+        response.isSignedIn == true &&
+        response.nextStep.signInStep === "DONE"
+      ) {
+        message.success("Login Successfully");
 
-      if (response.status == 200) {
-        message.success(response.message);
+        const user = await getCurrentUser();
 
-        setCookie("Authenticate", JSON.stringify(response.session));
+        const result: any = await getUserToStoreSession(user);
+
+        if (Object.keys(result).length !== 0) {
+          setCookie("Authenticate", JSON.stringify(result));
+        } else return
 
         setTimeout(() => {
-          router.push(response.path);
-        }, 1000);
+          router.push("/main/dashboard");
+        }, 2000);
       } else {
-        message.error(response.message);
-        return;
+        message.error("Username or password is not correct");
       }
     } catch (error) {
-      console.log(error);
+      message.error("Already signin");
     }
   };
-
   return (
     <>
       <Form
@@ -54,18 +67,18 @@ export default function SignInForm({ authenticate }: any) {
           name="username"
           style={{ width: "100%" }}
           rules={[{ required: true, message: "Please input your username!" }]}
-          initialValue={"congtri"}
+          initialValue={"+84326034561"}
         >
-          <Input placeholder="congtri" size="large" />
+          <Input placeholder="+84326034561" size="large" />
         </Form.Item>
 
         <Title level={3}>Password:</Title>
         <Form.Item<FieldType>
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
-          initialValue={"12345"}
+          initialValue={"Tri@2024"}
         >
-          <Input.Password placeholder="12345" size="large" />
+          <Input.Password placeholder="Tri@2024" size="large" />
         </Form.Item>
 
         <Form.Item>

@@ -3,7 +3,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { createSession } from "./session";
+// import { createSession } from "./session";
 
 const fs = require("fs");
 
@@ -19,8 +19,6 @@ export async function authenticate(username: string, password: string) {
     const sessionID: number = Math.round(Math.random() * (100 - 1) + 1);
     const token: string = `Authorize Successfully ${sessionID}`;
 
-    createSession(sessionID, token);
-    
     return {
       status: 200,
       message: "Successful",
@@ -58,11 +56,15 @@ export async function logout() {
       status: 200,
       message: "Sign Out Successful",
       path: "/main/signin",
-    }; 
+    };
   } else {
     return {
       status: 400,
       message: "Sign Out Unsuccessful",
-    }; 
+    };
   }
 }
+//
+
+
+

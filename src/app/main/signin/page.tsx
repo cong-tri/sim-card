@@ -1,10 +1,11 @@
 /** @format */
 
-import { authenticate } from "@/app/lib/authenticate";
+import { getUserToStoreSession } from "@/app/lib/session";
 import SignInForm from "./SignInForm";
 import Title from "antd/es/typography/Title";
 
 export default async function SignIn() {
+  
   return (
     <>
       <div className="container flex items-center justify-center h-full">
@@ -12,9 +13,10 @@ export default async function SignIn() {
           <Title level={1} className="text-center">
             Sign In Page
           </Title>
-          <SignInForm authenticate={authenticate} />
+          <SignInForm getUserToStoreSession={getUserToStoreSession}/> 
         </div>
       </div>
     </>
   );
 }
+

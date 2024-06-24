@@ -1,0 +1,27 @@
+{
+  "Auth": {
+    "Cognito": {
+      "region": "ap-southeast-1",
+      "userPoolClientId": "5uk4dc2q76f3aqi6lgotacd195",
+      "userPoolId": "ap-southeast-1_jveHfsJ5Y",
+      "loginWith": {
+        "oauth": {
+          "domain": "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_jveHfsJ5Y",
+          "scopes": [
+            "openid",
+            "email",
+            "phone",
+            "profile",
+            "aws.cognito.signin.user.admin"
+          ],
+          "redirectSignIn": ["http://localhost:3000/"],
+          "redirectSignOut": ["http://localhost:3000/"],
+          "responseType": "code"
+        },
+        "username": "true",
+        "email": "false",
+        "phone": "false"
+      }
+    }
+  }
+}
