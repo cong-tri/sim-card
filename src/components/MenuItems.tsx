@@ -16,7 +16,9 @@ import {
 } from "@ant-design/icons";
 import { getCookie } from "typescript-cookie";
 import { logout } from "@/app/lib/authenticate";
-import LogoutButton from "./LogoutButton";
+import { signOut } from "aws-amplify/auth";
+import { Amplify } from "aws-amplify";
+import { authConfig } from "@/amplify/auth/amplifyConvider";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -26,6 +28,8 @@ const MenuItems: React.FC = () => {
 
   const router = useRouter();
   const pathName = usePathname();
+
+  Amplify.configure({ Auth: authConfig });
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -40,8 +44,11 @@ const MenuItems: React.FC = () => {
   }, [router, pathName]);
 
   const logoutAction = async () => {
+    await signOut({global: true})
+
     const result: any = await logout();
     console.log(result);
+    
 
     if (result.status === 200) {
       message.success(result.message);
@@ -117,3 +124,13 @@ const MenuItems: React.FC = () => {
 };
 
 export default MenuItems;
+
+function LogoutButton({ logoutAction }: any) {
+  return (
+    <form action={logoutAction}>
+      <button type="submit" className="border-0 bg-transparent">
+        Sign Out
+      </button>
+    </form>
+  );
+}

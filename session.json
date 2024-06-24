@@ -1,15 +1,1 @@
-[
-    {
-        "sessionID": 22,
-        "token": "Authorize Successfully 22",
-        "user": {
-            "username": "v-r-1718955192550",
-            "userId": "4bd6355d-9fd9-4852-b6fc-91076db8e849",
-            "signInDetails": {
-                "loginId": "+84326034561",
-                "authFlowType": "USER_SRP_AUTH"
-            }
-        },
-        "createDate": "2024-06-24T06:42:50.272Z"
-    }
-]
+[]

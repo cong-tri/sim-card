@@ -60,7 +60,7 @@ export async function logout() {
   } else {
     return {
       status: 400,
-      message: "Sign Out Unsuccessful",
+      message: "Sign Out Unsuccessfully",
     };
   }
 }
