@@ -29,8 +29,8 @@ export default function SignInForm({ getUserToStoreSession }: any) {
         username,
         password,
         options: {
-          authFlowType: 'USER_PASSWORD_AUTH'
-      }
+          authFlowType: "USER_PASSWORD_AUTH",
+        },
       });
       if (
         response.isSignedIn == true &&
@@ -42,9 +42,9 @@ export default function SignInForm({ getUserToStoreSession }: any) {
 
         const result: any = await getUserToStoreSession(user);
 
-        if (Object.keys(result).length !== 0) {
+        if (typeof document !== "undefined") {
           setCookie("Authenticate", JSON.stringify(result));
-        } else return
+        } else return;
 
         setTimeout(() => {
           router.push("/main/dashboard");
@@ -53,7 +53,7 @@ export default function SignInForm({ getUserToStoreSession }: any) {
         message.error("Username or password is not correct");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
   return (
