@@ -14,8 +14,8 @@ export async function middleware(request: NextRequest) {
 
   const listSession: any = await getSession();
   
-  let cookieByClient: any = request.cookies.get("Authenticate")?.value;
-  cookieByClient = cookieByClient ? JSON.parse(cookieByClient) : {};
+  let cookieByClient: any = request.cookies.get("Authenticate")?.value;  
+  cookieByClient = cookieByClient !== undefined ? JSON.parse(cookieByClient) : {};
 
   const session = listSession.find(
     (session: any) =>
@@ -55,7 +55,7 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(new URL("/main/signin", request.url));
   }
-  
+
   return response
 }
 
