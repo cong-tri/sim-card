@@ -8,7 +8,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/main",
+        source: "/(.*)",
         headers: [
           {
             key: "Access-Control-Allow-Origin",
