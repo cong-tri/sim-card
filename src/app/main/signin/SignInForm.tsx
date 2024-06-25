@@ -43,7 +43,7 @@ export default function SignInForm({ getUserToStoreSession }: any) {
         const result: any = await getUserToStoreSession(user);
 
         if (typeof document !== "undefined") {
-          setCookie("Authenticate", JSON.stringify(result));
+          setCookie("Authenticate", JSON.stringify(result !== undefined ? result : {}));
         } else return;
 
         setTimeout(() => {
