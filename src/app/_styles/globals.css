@@ -7,7 +7,3 @@
 .ant-modal-mask {
   background-color: transparent !important;
 }
-.ant-layout-sider{
-  position: fixed !important;
-  height: 100vh;
-}
