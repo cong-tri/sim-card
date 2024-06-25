@@ -8,11 +8,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/main",
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "*", // Set your origin
+            value: "https://sim-card-seven.vercel.app", // Set your origin
           },
           {
             key: "Access-Control-Allow-Methods",
