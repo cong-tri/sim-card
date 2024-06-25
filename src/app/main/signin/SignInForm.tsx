@@ -28,6 +28,9 @@ export default function SignInForm({ getUserToStoreSession }: any) {
       const response = await signIn({
         username,
         password,
+        options: {
+          authFlowType: 'USER_PASSWORD_AUTH'
+      }
       });
       if (
         response.isSignedIn == true &&
@@ -50,7 +53,7 @@ export default function SignInForm({ getUserToStoreSession }: any) {
         message.error("Username or password is not correct");
       }
     } catch (error) {
-      message.error("Already signin");
+      console.error(error)
     }
   };
   return (

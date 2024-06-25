@@ -140,11 +140,9 @@ export default function Statistics() {
                     {items.icon}
                   </div>
                 </Col>
-                <Col span={12}>
-                  <div className="text-right">
-                    <p className="text-lg text-gray-400">{items.label}</p>
-                    <Title level={2}>{items.statisNumber}</Title>
-                  </div>
+                <Col span={12} className="text-right">
+                  <p className="text-lg text-gray-400">{items.label}</p>
+                  <Title level={3}>{items.statisNumber}</Title>
                 </Col>
               </Row>
               <p className="text-lg text-gray-400 py-4 px-2">
@@ -170,12 +168,8 @@ export default function Statistics() {
                     {items.label}
                   </p>
                 </Col>
-                <Col span={12}>
-                  <div className="text-right">
-                    <p className="text-base text-gray-400">
-                      {items.statisDate}
-                    </p>
-                  </div>
+                <Col span={12} className="text-right">
+                  <p className="text-base text-gray-400">{items.statisDate}</p>
                 </Col>
               </Row>
               <Title level={2} className="pl-4">

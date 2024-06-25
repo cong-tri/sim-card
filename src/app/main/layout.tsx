@@ -22,7 +22,7 @@ export default function MainLayout({
         <div className="demo-logo-vertical" />
         <MenuItems />
       </Sider>
-      <Layout>
+      <Layout className="ml-[200px]">
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
