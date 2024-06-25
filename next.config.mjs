@@ -12,7 +12,7 @@ const nextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://sim-card-seven.vercel.app", // Set your origin
+            value: "*", // Set your origin
           },
           {
             key: "Access-Control-Allow-Methods",
