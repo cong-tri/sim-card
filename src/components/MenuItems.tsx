@@ -1,7 +1,7 @@
 /** @format */
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { MenuProps } from "antd";
@@ -14,56 +14,34 @@ import {
   ProfileOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { getCookie } from "typescript-cookie";
-import { logout } from "@/app/lib/authenticate";
-import { signOut } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 import { authConfig } from "@/amplify/auth/amplifyConvider";
+import { signOut } from "aws-amplify/auth";
+import { getCookie, removeCookie } from "typescript-cookie";
+
+Amplify.configure({ Auth: authConfig });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
-  const [cookie, setCookie] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [current, setCurrent] = useState<string>("signin");
 
   const router = useRouter();
-  const pathName = usePathname();
-
-  Amplify.configure({ Auth: authConfig });
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      let authenCookie: any = getCookie("Authenticate");
-      authenCookie = authenCookie ? JSON.parse(authenCookie) : null;
+    if (typeof document !== undefined) {
 
-      setCookie(authenCookie);
-      setCurrent(authenCookie !== null ? "dashboard" : "signin");
+      let currentUser = getCookie("User");
+      currentUser = !currentUser ? null : JSON.parse(currentUser);
+      
+      setUser(currentUser ? currentUser : null);
+      setCurrent(currentUser ? pathname.replace("/main/", "") : "signin")
 
-      router.prefetch(pathName);
+      router.refresh()
     }
-  }, [router, pathName]);
-
-  const logoutAction = async () => {
-    await signOut({global: true})
-
-    const result: any = await logout();
-    console.log(result);
-    
-
-    if (result.status === 200) {
-      message.success(result.message);
-
-      setCookie(null);
-      setCurrent("signin");
-
-      setTimeout(() => {
-        router.push(result.path);
-      }, 3000);
-    } else {
-      message.error(result.message);
-      return;
-    }
-  };
+  }, [router, pathname]);
 
   const menuItems: MenuItem[] = [
     {
@@ -71,7 +49,7 @@ const MenuItems: React.FC = () => {
       label: "User Account",
       icon: <UserOutlined />,
       children: [
-        cookie
+        user
           ? {
               label: "Settings",
               type: "group",
@@ -82,11 +60,13 @@ const MenuItems: React.FC = () => {
                     <Link href={"/main/vendorProfile"}>Vendor Profile</Link>
                   ),
                   icon: <ProfileOutlined />,
+                  disabled: !user ? true : false,
                 },
                 {
                   key: "signout",
-                  label: <LogoutButton logoutAction={logoutAction} />,
+                  label: "Sign Out",
                   icon: <LogoutOutlined />,
+                  disabled: !user ? true : false,
                 },
               ],
             }
@@ -101,16 +81,31 @@ const MenuItems: React.FC = () => {
       key: "dashboard",
       label: <Link href={"/main/dashboard"}>DashBoard</Link>,
       icon: <HomeOutlined />,
+      disabled: !user ? true : false,
     },
     {
       key: "product",
       label: <Link href={"/main/product"}>Product</Link>,
       icon: <ProductOutlined />,
+      disabled: !user ? true : false,
     },
   ];
 
-  const onClick: MenuProps["onClick"] = (e) => {    
+  const onClick: MenuProps["onClick"] = async (e) => {
     setCurrent(e.key);
+
+    if (e.key == "signout") {
+
+      await signOut({ global: true });
+      removeCookie("User", {path: '/main', secure: false})
+
+      setUser(null)
+      setCurrent("signin");
+
+      message.success("Log out success", 2.5, () =>
+        router.push("/main/signin")
+      );
+    }
   };
   return (
     <Menu
@@ -124,13 +119,3 @@ const MenuItems: React.FC = () => {
 };
 
 export default MenuItems;
-
-function LogoutButton({ logoutAction }: any) {
-  return (
-    <form action={logoutAction}>
-      <button type="submit" className="border-0 bg-transparent">
-        Sign Out
-      </button>
-    </form>
-  );
-}

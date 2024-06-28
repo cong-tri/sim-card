@@ -6,10 +6,10 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Button, Form, Input, message } from "antd";
 import Title from "antd/es/typography/Title";
-import { setCookie } from "typescript-cookie";
 import { Amplify } from "aws-amplify";
 import { SignInInput, getCurrentUser, signIn } from "aws-amplify/auth";
 import { authConfig } from "@/amplify/auth/amplifyConvider";
+import { setCookie } from "typescript-cookie";
 
 Amplify.configure({ Auth: authConfig });
 
@@ -19,7 +19,7 @@ type FieldType = {
   remember?: string;
 };
 
-export default function SignInForm({ getUserToStoreSession }: any) {
+export default function SignInForm() {
   const [form] = Form.useForm();
   const router = useRouter();
 
@@ -32,25 +32,17 @@ export default function SignInForm({ getUserToStoreSession }: any) {
           authFlowType: "USER_PASSWORD_AUTH",
         },
       });
+
       if (
         response.isSignedIn == true &&
         response.nextStep.signInStep === "DONE"
       ) {
-        message.success("Login Successfully");
+        const currentUser = await getCurrentUser()
+        setCookie("User", JSON.stringify(currentUser), {expires: 2, path: "/main", secure: true})
 
-        const user = await getCurrentUser();
-
-        const result: any = await getUserToStoreSession(user);
-
-        if (typeof document !== "undefined") {
-          setCookie("Authenticate", JSON.stringify(result !== undefined ? result : {}));
-        } else return;
-
-        setTimeout(() => {
-          router.push("/main/dashboard");
-        }, 2000);
+        message.success("Login Successfully", 2, () => router.push("/main/dashboard"));
       } else {
-        message.error("Username or password is not correct");
+        message.error("Username or password is not correct", 2);
       }
     } catch (error) {
       console.error(error);
