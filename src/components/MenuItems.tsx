@@ -14,12 +14,8 @@ import {
   ProfileOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Amplify } from "aws-amplify";
-import { authConfig } from "@/amplify/auth/amplifyConvider";
 import { signOut } from "aws-amplify/auth";
 import { getCookie, removeCookie } from "typescript-cookie";
-
-Amplify.configure({ Auth: authConfig });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -102,9 +98,7 @@ const MenuItems: React.FC = () => {
       setUser(null)
       setCurrent("signin");
 
-      message.success("Log out success", 2.5, () =>
-        router.push("/main/signin")
-      );
+      message.success("Log out success", 2, () => router.push("/main/signin"));
     }
   };
   return (
