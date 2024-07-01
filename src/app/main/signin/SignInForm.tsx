@@ -71,9 +71,10 @@ export default function SignInForm() {
           secure: true,
         });
 
-        message.success("Login Successfully", 2, () =>
-          router.push("/main/dashboard")
-        );
+        message.success("Login Successfully", 2, () => {
+          router.refresh()
+          router.push("/main/dashboard");
+        });
       } else {
         message.error("Username or password is not correct", 2);
       }
