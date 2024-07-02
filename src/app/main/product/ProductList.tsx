@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { Col, Modal, Row, QRCode, Card } from "antd";
 import Image from "next/image";
-import iphone14 from "../../../../public/images/iphone14.webp";
-import iphone11 from "../../../../public/images/iphone-11.jpg";
+import e_sim1 from "../../../../public/images/e_sim1.jpg";
+import e_sim2 from "../../../../public/images/e_sim2.jpg";
+import e_sim3 from "../../../../public/images/e_sim3.jpg";
 import iphone12 from "../../../../public/images/iphone-12.jpg";
 import iphone13 from "../../../../public/images/iphone-13.webp";
-import samsungFold from "../../../../public/images/samsung-galaxy-z-fold.jpg";
 import samsungFlip from "../../../../public/images/samsung-z-flip.webp";
 
 const { Meta } = Card;
@@ -26,17 +26,17 @@ const productList: ProductList[] = [
   {
     proId: 1,
     proName: "E Sim 1",
-    proDesc: "Iphone 14",
-    proImg: iphone14,
+    proDesc: "E Sim Singapore",
+    proImg: e_sim1,
     proPrice: 135000,
-    proData: "5 GB / 1 day => 150GB",
-    proExpire: "1 Month",
+    proData: "Unlimited data 500MP - 2GB daily",
+    proExpire: "1 - 5 days",
   },
   {
     proId: 2,
     proName: "E Sim 2",
-    proDesc: "Samsung Galaxy G Fold 5",
-    proImg: samsungFold,
+    proDesc: "E Sim Singapore Signtel",
+    proImg: e_sim2,
     proPrice: 130000,
     proData: "5 GB / 1 day => 150GB",
     proExpire: "1 Month",
@@ -44,15 +44,15 @@ const productList: ProductList[] = [
   {
     proId: 3,
     proName: "E Sim 3",
-    proDesc: "Iphone 11",
-    proImg: iphone11,
+    proDesc: "E Sim Singapore Signtel",
+    proImg: e_sim3,
     proPrice: 130000,
-    proData: "5 GB / 1 day => 150GB",
+    proData: "10GB Total Package No Daily Limit",
     proExpire: "1 Month",
   },
   {
     proId: 4,
-    proName: "E Sim 4",
+    proName: "Iphone 12",
     proDesc: "Iphone 12",
     proImg: iphone12,
     proPrice: 130000,
@@ -61,7 +61,7 @@ const productList: ProductList[] = [
   },
   {
     proId: 5,
-    proName: "E Sim 5",
+    proName: "Iphone 13",
     proDesc: "Iphone 13",
     proImg: iphone13,
     proPrice: 130000,
@@ -70,7 +70,7 @@ const productList: ProductList[] = [
   },
   {
     proId: 6,
-    proName: "E Sim 6",
+    proName: "Samsung Z Flip",
     proDesc: "Samsung Z Flip",
     proImg: samsungFlip,
     proPrice: 130000,

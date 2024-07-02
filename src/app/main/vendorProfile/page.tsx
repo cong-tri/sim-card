@@ -3,7 +3,8 @@ import React from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import UpdateProfile from "./UpdateProfileForm";
+import UpdateProfileForm from "./_components/UpdateProfileForm";
+import SocketIOClient from "./_components/SocketIOClient";
 
 export default function VendorProfilePage() {
   return (
@@ -23,7 +24,7 @@ export default function VendorProfilePage() {
               Complete Your Profile
             </Title>
           </div>
-          <UpdateProfile />
+          <UpdateProfileForm />
         </Col>
         <Col span={8}>
           <div className="border-2 rounded-2xl py-14 text-center">
@@ -36,6 +37,7 @@ export default function VendorProfilePage() {
               Follow
             </Button>
           </div>
+          <SocketIOClient/>
         </Col>
       </Row>
     </>

@@ -2,7 +2,7 @@
 
 import { type NextRequest, NextResponse } from "next/server";
 import { runWithAmplifyServerContext } from "./amplify/utils/amplifyServerUtils";
-import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth/server";
+import { fetchAuthSession } from "aws-amplify/auth/server";
 
 export async function middleware(request: NextRequest) {
   if (
@@ -18,21 +18,23 @@ export async function middleware(request: NextRequest) {
     nextServerContext: { request, response },
     operation: async (contextSpec) => {
       try {
-        const session = await fetchAuthSession(contextSpec);
+        const session = await fetchAuthSession(contextSpec, {
+          forceRefresh: false,
+        });
 
-        const expiredDateJWT = session?.tokens?.accessToken.payload.exp;
-        
-        const isValid = !expiredDateJWT ? false : expiredDateJWT <= Date.now() ? true : false
+        const expiredDateJWT: any = session?.tokens?.idToken?.payload.exp;
 
-        return !!session?.tokens && !!isValid;
+        const isValid = expiredDateJWT <= Date.now() ? true : false;
+
+        return !!isValid;
       } catch (error) {
         console.log(error);
       }
       return false;
     },
   });
-  
-  if (config.matcher.includes(request.nextUrl.pathname) && !authenticated) {    
+
+  if (config.matcher.includes(request.nextUrl.pathname) && !authenticated) {
     return NextResponse.redirect(new URL("/main/signin", request.url));
   }
 
