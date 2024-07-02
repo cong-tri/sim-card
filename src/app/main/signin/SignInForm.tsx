@@ -36,7 +36,7 @@ export default function SignInForm() {
         const currentUser = await getCurrentUser();
 
         setCookie("User", JSON.stringify(currentUser), {
-          expires: 2,
+          expires: 1,
           path: "/main",
           secure: true,
         });
