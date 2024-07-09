@@ -33,7 +33,7 @@ export default function UpdateProfileForm() {
       onFinish={onFinish}
       style={{ width: "100%" }}>
       <Row align={"middle"} gutter={16}>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>ID:</Title>
           <Form.Item<FieldType>
             name='id'
@@ -42,7 +42,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your ID' size='middle' disabled />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Username:</Title>
           <Form.Item<FieldType>
             name='username'
@@ -52,7 +52,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your username' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Email Address:</Title>
           <Form.Item<FieldType>
             name='email'
@@ -68,7 +68,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your email' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>First Name:</Title>
           <Form.Item<FieldType>
             name='firstName'
@@ -80,7 +80,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your first name' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Last Name:</Title>
           <Form.Item<FieldType>
             name='lastName'
@@ -92,7 +92,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your last name' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Phone Number:</Title>
           <Form.Item<FieldType>
             name='phoneNumber'
@@ -111,7 +111,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your cellphone number' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>City:</Title>
           <Form.Item<FieldType>
             name='city'
@@ -121,7 +121,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your city' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Country:</Title>
           <Form.Item<FieldType>
             name='country'
@@ -131,7 +131,7 @@ export default function UpdateProfileForm() {
             <Input placeholder='your country' size='middle' />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={12} lg={8}>
           <Title level={4}>Postal Code:</Title>
           <Form.Item<FieldType>
             name='postalCode'
