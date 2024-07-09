@@ -1,6 +1,6 @@
 /** @format */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Modal, Row, QRCode, Card } from "antd";
 import Image from "next/image";
 import e_sim1 from "../../../../public/images/e_sim1.jpg";
@@ -9,6 +9,7 @@ import e_sim3 from "../../../../public/images/e_sim3.jpg";
 import iphone12 from "../../../../public/images/iphone-12.jpg";
 import iphone13 from "../../../../public/images/iphone-13.webp";
 import samsungFlip from "../../../../public/images/samsung-z-flip.webp";
+import { getCookie } from "typescript-cookie";
 
 const { Meta } = Card;
 
@@ -25,6 +26,13 @@ type ProductList = {
 export default function ProductList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [id, setId] = useState(0);
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    let user: any = getCookie("User");
+    user = !user ? {} : JSON.parse(user);
+    setUserId(user.userId);
+  }, []);
 
   const productList: ProductList[] = [
     {
@@ -142,7 +150,7 @@ export default function ProductList() {
                       <Col span={10}>
                         <QRCode
                           type="svg"
-                          value={`product ${proData.proId}\nname: ${proData.proName}\ndescription: ${proData.proDesc}\nprice: ${proData.proPrice}\ndata: ${proData.proData}\nexpire: ${proData.proExpire}\nvendor_id: 1`}
+                          value={`product ${proData.proId}\nname: ${proData.proName}\ndescription: ${proData.proDesc}\nprice: ${proData.proPrice}\ndata: ${proData.proData}\nexpire: ${proData.proExpire}\nvendor_id: ${userId}`}
                         />
                       </Col>
                       <Col span={14}>
@@ -150,9 +158,7 @@ export default function ProductList() {
                         <p>product id: {proData.proId}</p>
                         <p>product name: {proData.proName}</p>
                         <p>product desc: {proData.proDesc}</p>
-                        <p>
-                          product price: {proData.proPrice}
-                        </p>
+                        <p>product price: {proData.proPrice}</p>
                         <p>product data: {proData.proData}</p>
                         <p>product expire: {proData.proExpire}</p>
                       </Col>

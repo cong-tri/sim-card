@@ -37,7 +37,7 @@ const MenuItems: React.FC = () => {
 
       setUser(currentUser ? currentUser : null);
       setCurrent(pathname);
-      
+
       // router.refresh();
     }
   }, [router, pathname]);
@@ -94,10 +94,11 @@ const MenuItems: React.FC = () => {
   return (
     <Menu
       onClick={onClick}
-      theme="dark"
+      theme="light"
       mode="horizontal"
       selectedKeys={[current]}
       items={menuItems}
+      className=""
     />
   );
 };
