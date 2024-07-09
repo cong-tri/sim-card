@@ -13,8 +13,7 @@ import { TransactionContext } from "@/context/TransactionProvider";
 
 export default function Statistics() {
   const data: any = useContext(TransactionContext)
-  console.log(data);
-
+  
   const totalAmount = data.reduce((sum: any, item: any) => sum + item.amount, 0);
   const averageAmount = totalAmount / data.length;
 
