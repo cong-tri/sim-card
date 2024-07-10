@@ -90,7 +90,7 @@ const MenuItems: React.FC = () => {
       mode="horizontal"
       selectedKeys={[current]}
       items={menuItems}
-      className=""
+      className="fixed"
     />
   );
 };
