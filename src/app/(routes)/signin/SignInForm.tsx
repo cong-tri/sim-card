@@ -48,7 +48,7 @@ export default function SignInForm() {
 
         message.success("Login Successfully", 2, () => {
           router.refresh();
-          router.push("/");
+          router.push("/user");
         });
       } else {
         message.error("Username or password is not correct", 2);

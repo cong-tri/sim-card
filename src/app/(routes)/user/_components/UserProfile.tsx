@@ -13,7 +13,7 @@ export default function UserProfile() {
       <Row
         className="w-full px-14"
         gutter={30}
-        align={"middle"}
+        align={"top"}
         justify={"center"}
       >
         <Col xs={24} lg={16} className="border-2 rounded-2xl py-10 px-4">

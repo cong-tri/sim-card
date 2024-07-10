@@ -25,7 +25,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
   const [user, setUser] = useState<any>(null);
-  const [current, setCurrent] = useState<string>("dashboard");
+  const [current, setCurrent] = useState<string>("/signin");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -36,7 +36,7 @@ const MenuItems: React.FC = () => {
       currentUser = !currentUser ? null : JSON.parse(currentUser);
 
       setUser(currentUser ? currentUser : null);
-      setCurrent(pathname);
+      setCurrent(currentUser ? pathname : "/signin");
 
       // router.refresh();
     }
@@ -44,24 +44,14 @@ const MenuItems: React.FC = () => {
 
   const menuItems: MenuItem[] = [
     {
-      key: "/",
-      label: <Link href={"/"}>DashBoard</Link>,
-      icon: <HomeOutlined />,
-    },
-    user
-      ? {
-          key: "account",
-          label: "User",
-          icon: <UserOutlined />,
-          children: [
+      key: "account",
+      label: "User",
+      icon: <UserOutlined />,
+      children: user
+        ? [
             {
               key: "/user",
               label: <Link href={"/user"}>DashBoard User</Link>,
-              icon: <ProfileOutlined />,
-            },
-            {
-              key: "/product",
-              label: <Link href={"/product"}>Product</Link>,
               icon: <ProfileOutlined />,
             },
             {
@@ -69,13 +59,15 @@ const MenuItems: React.FC = () => {
               label: "Sign Out",
               icon: <LogoutOutlined />,
             },
+          ]
+        : [
+            {
+              key: "/signin",
+              label: <Link href={"/signin"}>Sign In</Link>,
+              icon: <LoginOutlined />,
+            },
           ],
-        }
-      : {
-          key: "/signin",
-          label: <Link href={"/signin"}>Sign In</Link>,
-          icon: <LoginOutlined />,
-        },
+    },
   ];
 
   const onClick: MenuProps["onClick"] = async (e) => {
@@ -86,7 +78,7 @@ const MenuItems: React.FC = () => {
       removeCookie("User", { path: " ", secure: false });
 
       setUser(null);
-      setCurrent("dashboard");
+      setCurrent("/signin");
 
       message.success("Log out success", 2, () => router.push("/"));
     }

@@ -11,14 +11,20 @@ export const TransactionProvider = ({
   children: React.ReactNode;
 }>) => {
   const [isConnected, setIsConnected] = useState(false);
-  
-  const [idToken, setIdToken] = useState<string>("")
+
+  const [idToken, setIdToken] = useState<string>("");
 
   const transactionSocket = useTransactionSocket(idToken);
 
   useEffect(() => {
-    setIdToken(getCookie("CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken") as string)
-
+    if (typeof document !== undefined) {
+      setIdToken(
+        getCookie(
+          "CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken"
+        ) as string
+      );
+    }
+    
     if (transactionSocket?.connected) {
       setIsConnected(true);
     }

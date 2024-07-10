@@ -13,24 +13,31 @@ export const UserProvider = ({
   const [isConnected, setIsConnected] = useState(false);
   const [authQRCode, setAuthQRCode] = useState<any>({});
 
-  const [idToken, setIdToken] = useState<string>("")
+  const [idToken, setIdToken] = useState<string>("");
 
   const authSocket = useAuthSocket(idToken !== "" ? idToken : "");
 
   useEffect(() => {
-    setIdToken(getCookie("CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken") as string)
-    authSocket?.on("connect", () => setIsConnected(true));
+    if (typeof window !== undefined) {
+      setIdToken(
+        getCookie(
+          "CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken"
+        ) as string
+      );
+    }
 
     if (authSocket?.connected) {
       setIsConnected(true);
     }
 
+    authSocket?.on("connect", () => setIsConnected(true));
+
     authSocket?.emit("qrcode", (res: any) => {
       const qrcode: any = res?.qrcode;
       setAuthQRCode(qrcode);
-      authSocket.disconnect()
+      authSocket.disconnect();
     });
-    
+
     authSocket?.on("disconnect", () => setIsConnected(false));
 
     return () => {
@@ -40,8 +47,6 @@ export const UserProvider = ({
   }, [idToken]);
 
   return (
-    <UserContext.Provider value={authQRCode}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={authQRCode}>{children}</UserContext.Provider>
   );
 };
