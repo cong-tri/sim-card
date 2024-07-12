@@ -3,12 +3,12 @@ import React, { useContext, useState } from "react";
 import { MainContext } from "@/context/MainProvider";
 import Image from "next/image";
 import { UserContext } from "@/context/UserProvider";
-import { Button, Col, Modal, Row } from "antd";
+import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import Link from "next/link";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   const data: any = useContext(UserContext);
 
@@ -20,9 +20,15 @@ export default function QRCodeVendor() {
       <Modal
         title="QR CODE"
         open={isModalOpen}
-        footer={<>
-          <Button type="primary" danger onClick={() => setIsModalOpen(false)}>Close</Button>
-        </>}
+        onCancel={() => setIsModalOpen(false)}
+        onClose={() => setIsModalOpen(false)}
+        footer={
+          <>
+            <Button type="primary" danger onClick={() => setIsModalOpen(false)}>
+              Close
+            </Button>
+          </>
+        }
         width={500}
       >
         <Row align={"top"} gutter={20} justify={"center"}>
@@ -56,14 +62,62 @@ export default function QRCodeVendor() {
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>
-            <Button htmlType="button">Share</Button>
+            <Button htmlType="button" onClick={() => setIsModal(true)}>
+              Share
+            </Button>
+            <Modal
+              title="Share QR code"
+              open={isModal}
+              onCancel={() => setIsModal(false)}
+              onClose={() => setIsModal(false)}
+              footer={
+                <>
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={() => setIsModal(false)}
+                  >
+                    Close
+                  </Button>
+                </>
+              }
+            >
+              <Form
+                name="basic"
+                autoComplete="off"
+                onFinish={(values) => {
+                  navigator.clipboard.writeText(values.url);
+                  message.success("Success copy to clipboard.", 2);
+                }}
+                style={{ width: "100%" }}
+              >
+                <Row align={"middle"} gutter={16}>
+                  <Col span={18}>
+                    <Form.Item
+                      name="url"
+                      initialValue={
+                        "https://sim-card-seven.vercel.app/images/qrcode.png"
+                      }
+                    >
+                      <Input disabled size={"large"} />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Form.Item>
+                      <Button htmlType="submit">
+                        Copy url
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Modal>
           </Col>
           <Col>
             <Button
               type="primary"
               href={"/images/qrcode.png"}
-              // download={true}
-              target="_blank"
+              download={true}
               htmlType="button"
             >
               Download
@@ -74,3 +128,4 @@ export default function QRCodeVendor() {
     </>
   );
 }
+//https://sim-card-seven.vercel.app/images/qrcode.png
