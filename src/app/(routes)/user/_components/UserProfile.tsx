@@ -11,7 +11,7 @@ export default function UserProfile() {
   return (
     <>
       <Row
-        className="w-full px-14"
+        className="w-full px-14 mt-10"
         gutter={30}
         align={"top"}
         justify={"center"}

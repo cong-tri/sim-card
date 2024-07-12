@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useEffect, useState } from "react";
-import useTransactionSocket from "@/hook/socket/useTransactionSocket";
+import useTransactionSocket from "@/hooks/socket/useTransactionSocket";
 import { getCookie } from "typescript-cookie";
 
 export const TransactionContext = createContext({});
@@ -14,38 +14,38 @@ export const TransactionProvider = ({
 
   const [idToken, setIdToken] = useState<string>("");
 
-  const transactionSocket = useTransactionSocket(idToken);
+  // const transactionSocket = useTransactionSocket(idToken);
 
-  useEffect(() => {
-    if (typeof document !== undefined) {
-      setIdToken(
-        getCookie(
-          "CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken"
-        ) as string
-      );
-    }
+  // useEffect(() => {
+  //   if (typeof document !== undefined) {
+  //     setIdToken(
+  //       getCookie(
+  //         "CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken"
+  //       ) as string
+  //     );
+  //   }
     
-    if (transactionSocket?.connected) {
-      setIsConnected(true);
-    }
+  //   if (transactionSocket?.connected) {
+  //     setIsConnected(true);
+  //   }
 
-    transactionSocket?.on("connect", () => setIsConnected(true));
+  //   transactionSocket?.on("connect", () => setIsConnected(true));
 
-    transactionSocket?.emit("info", {
-      id: "666863229c4962324ceab295",
-    });
+  //   transactionSocket?.emit("info", {
+  //     id: "666863229c4962324ceab295",
+  //   });
 
-    transactionSocket?.on("info", () => {
-      transactionSocket.disconnect();
-    });
+  //   transactionSocket?.on("info", () => {
+  //     transactionSocket.disconnect();
+  //   });
 
-    transactionSocket?.on("disconnect", () => setIsConnected(false));
+  //   transactionSocket?.on("disconnect", () => setIsConnected(false));
 
-    return () => {
-      transactionSocket?.off("connect", () => setIsConnected(false));
-      transactionSocket?.off("disconnect", () => setIsConnected(false));
-    };
-  }, []);
+  //   return () => {
+  //     transactionSocket?.off("connect", () => setIsConnected(false));
+  //     transactionSocket?.off("disconnect", () => setIsConnected(false));
+  //   };
+  // }, []);
   const listTransaction = [
     {
       id: "666863229c4962324ceab295",

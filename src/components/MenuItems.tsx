@@ -16,30 +16,34 @@ import {
 import { Amplify } from "aws-amplify";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import outputs from "@/amplify/amplifyconfiguration.json";
-import { signOut } from "aws-amplify/auth";
-import { getCookie, removeCookie } from "typescript-cookie";
+import { getCurrentUser, signOut } from "aws-amplify/auth";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const [current, setCurrent] = useState<string>("/signin");
-
   const router = useRouter();
   const pathname = usePathname();
 
+  const [user, setUser] = useState<any>({});
+  const [current, setCurrent] = useState<string>(
+    Object.keys(user).length != 0 ? pathname : "/signin"
+  );
+
   useEffect(() => {
-    if (typeof document !== undefined) {
-      let currentUser = getCookie("User");
-      currentUser = !currentUser ? null : JSON.parse(currentUser);
+    const fetchUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(!currentUser ? {} : currentUser);
+        setCurrent(!currentUser ? "/signin" : pathname);
+      } catch (error) {
+        setUser({});
+      }
+    };
 
-      setUser(currentUser ? currentUser : null);
-      setCurrent(currentUser ? pathname : "/signin");
-
-      // router.refresh();
-    }
+    fetchUser();
+    router.refresh();
   }, [router, pathname]);
 
   const menuItems: MenuItem[] = [
@@ -47,26 +51,26 @@ const MenuItems: React.FC = () => {
       key: "account",
       label: "User",
       icon: <UserOutlined />,
-      children: user
+      children: Object.keys(user).length != 0
         ? [
-            {
-              key: "/user",
-              label: <Link href={"/user"}>DashBoard User</Link>,
-              icon: <ProfileOutlined />,
-            },
-            {
-              key: "signout",
-              label: "Sign Out",
-              icon: <LogoutOutlined />,
-            },
-          ]
+          {
+            key: "/user",
+            label: <Link href={"/user"}>DashBoard User</Link>,
+            icon: <ProfileOutlined />,
+          },
+          {
+            key: "signout",
+            label: "Sign Out",
+            icon: <LogoutOutlined />,
+          },
+        ]
         : [
-            {
-              key: "/signin",
-              label: <Link href={"/signin"}>Sign In</Link>,
-              icon: <LoginOutlined />,
-            },
-          ],
+          {
+            key: "/signin",
+            label: <Link href={"/signin"}>Sign In</Link>,
+            icon: <LoginOutlined />,
+          },
+        ],
     },
   ];
 
@@ -75,12 +79,14 @@ const MenuItems: React.FC = () => {
 
     if (e.key == "signout") {
       await signOut({ global: true });
-      removeCookie("User", { path: " ", secure: false });
 
-      setUser(null);
+      setUser({});
       setCurrent("/signin");
 
-      message.success("Log out success", 2, () => router.push("/"));
+      message.success("Log out success", 2, () => {
+        router.refresh()
+        router.push("/signin");
+      });
     }
   };
   return (
@@ -90,7 +96,6 @@ const MenuItems: React.FC = () => {
       mode="horizontal"
       selectedKeys={[current]}
       items={menuItems}
-      className="fixed"
     />
   );
 };

@@ -22,7 +22,7 @@ type FieldType = {
 
 export default function UpdateProfileForm() {
   const onFinish = (values: any) => {
-    console.log(values);
+    // console.log(values);
   };
   const [form] = useForm();
   return (

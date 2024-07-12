@@ -3,6 +3,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import ReactQueryClientProvider from "@/components/ReactQueryClientProvider";
+import { MainProvider } from "@/context/MainProvider";
 import MenuItems from "@/components/MenuItems";
 import "./_styles/globals.css";
 
@@ -23,7 +25,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <AntdRegistry>
           <MenuItems />
-          {children}
+          <MainProvider>
+            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          </MainProvider>
         </AntdRegistry>
       </body>
     </html>

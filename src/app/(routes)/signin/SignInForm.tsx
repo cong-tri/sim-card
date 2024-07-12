@@ -6,11 +6,10 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Button, Form, Input, message } from "antd";
 import Title from "antd/es/typography/Title";
-import { SignInInput, getCurrentUser, signIn } from "aws-amplify/auth";
-import { removeCookie, setCookie } from "typescript-cookie";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
+import { SignInInput, signIn } from "aws-amplify/auth";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
@@ -38,14 +37,6 @@ export default function SignInForm() {
         response.isSignedIn == true &&
         response.nextStep.signInStep === "DONE"
       ) {
-        const currentUser = await getCurrentUser();
-
-        setCookie("User", JSON.stringify(currentUser), {
-          expires: 1,
-          path: "/",
-          secure: true
-        });
-
         message.success("Login Successfully", 2, () => {
           router.refresh();
           router.push("/user");

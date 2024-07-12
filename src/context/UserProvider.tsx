@@ -1,7 +1,8 @@
 "use client";
 import React, { createContext, useEffect, useState } from "react";
-import useAuthSocket from "@/hook/socket/useAuthSocket";
-import { getCookie } from "typescript-cookie";
+import useAuthSocket from "@/hooks/socket/useAuthSocket";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
 export const UserContext = createContext({});
 
@@ -10,43 +11,38 @@ export const UserProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [authQRCode, setAuthQRCode] = useState<any>({});
+  const eventName: string = "qrcode";
 
+  // const [authQRCode, setAuthQRCode] = useState<any>({});
   const [idToken, setIdToken] = useState<string>("");
-
-  const authSocket = useAuthSocket(idToken !== "" ? idToken : "");
+  // const [user, setUser] = useState<any>({});
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      setIdToken(
-        getCookie(
-          "CognitoIdentityServiceProvider.5uk4dc2q76f3aqi6lgotacd195.+84326034561.idToken"
-        ) as string
-      );
-    }
-
-    if (authSocket?.connected) {
-      setIsConnected(true);
-    }
-
-    authSocket?.on("connect", () => setIsConnected(true));
-
-    authSocket?.emit("qrcode", (res: any) => {
-      const qrcode: any = res?.qrcode;
-      setAuthQRCode(qrcode);
-      authSocket.disconnect();
-    });
-
-    authSocket?.on("disconnect", () => setIsConnected(false));
-
-    return () => {
-      authSocket?.off("connect", () => setIsConnected(false));
-      authSocket?.off("disconnect", () => setIsConnected(false));
+    const getSession = async () => {
+      try {
+        const session: any | undefined = await fetchAuthSession();
+        const token: string | undefined = session.tokens?.idToken?.toString();
+        setIdToken(!token ? "" : token);
+      } catch (error) {
+        console.error(error);
+      }
     };
+    getSession();
   }, [idToken]);
 
-  return (
-    <UserContext.Provider value={authQRCode}>{children}</UserContext.Provider>
-  );
+  useAuthSocket(idToken, eventName);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const currentUser = await getCurrentUser();
+  //       setUser(!currentUser ? null : currentUser);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
+
+  return <UserContext.Provider value={''}>{children}</UserContext.Provider>;
 };
