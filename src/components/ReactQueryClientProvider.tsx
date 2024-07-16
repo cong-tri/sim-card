@@ -12,7 +12,7 @@ const makeQueryClient = () => {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        staleTime: 60 * 1000,
+        staleTime: 1000 * 60 * 60 * 24,
       },
     },
   });
@@ -36,6 +36,8 @@ export default function ReactQueryClientProvider({
 }>) {
   const queryClient = getQueryClient();
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
   );
 }

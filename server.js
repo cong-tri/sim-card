@@ -1,4 +1,4 @@
-const { createServer } = require('http');
+const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const next = require('next');
 

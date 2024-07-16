@@ -1,9 +1,9 @@
 "use client";
 
-import useManagerSocket from "./useManagerSocket";
+// import useManagerSocket from "./useManager";
 
-const useTransactionSocket = (idToken: string) => {
-  // const manager = useManagerSocket();
+const useTransaction = (idToken: string) => {
+  // const manager = useManager();
 
   // if (!manager) {
   //   return;
@@ -17,4 +17,4 @@ const useTransactionSocket = (idToken: string) => {
   // return transactionSocket;
 };
 
-export default useTransactionSocket;
+export default useTransaction;

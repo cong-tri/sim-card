@@ -1,8 +1,10 @@
 "use client";
-import React, { createContext, useEffect, useState } from "react";
-import useAuthSocket from "@/hooks/socket/useAuthSocket";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
+import { useAuth } from "@/hooks/socket/useAuth";
+import { ManagerContext } from "./ManagerProvider";
+import { Manager } from "socket.io-client";
+import { Qrcode } from "@/types/types";
 
 export const UserContext = createContext({});
 
@@ -11,38 +13,23 @@ export const UserProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const eventName: string = "qrcode";
+  const queryClient = useQueryClient();
 
-  // const [authQRCode, setAuthQRCode] = useState<any>({});
-  const [idToken, setIdToken] = useState<string>("");
-  // const [user, setUser] = useState<any>({});
+  const manager = useContext(ManagerContext);
+  useAuth(manager as Manager);
 
-  useEffect(() => {
-    const getSession = async () => {
-      try {
-        const session: any | undefined = await fetchAuthSession();
-        const token: string | undefined = session.tokens?.idToken?.toString();
-        setIdToken(!token ? "" : token);
-      } catch (error) {
-        console.error(error);
+  const [qrcode, setQRCode] = useState<Qrcode>();
+
+  const getData = async () => {
+    const qrCodeAsync = new Promise((resolve) => {
+      const data = queryClient.getQueryData(["qrcode"]);
+      if (data !== undefined) {
+        resolve(data);
       }
-    };
-    getSession();
-  }, [idToken]);
-
-  useAuthSocket(idToken, eventName);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const currentUser = await getCurrentUser();
-  //       setUser(!currentUser ? null : currentUser);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, []);
-
-  return <UserContext.Provider value={''}>{children}</UserContext.Provider>;
+    });
+    const data: Qrcode | any = await qrCodeAsync;
+    setQRCode(data)
+  };
+  getData();
+  return <UserContext.Provider value={!qrcode ? "" : qrcode}>{children}</UserContext.Provider>;
 };

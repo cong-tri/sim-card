@@ -1,7 +1,6 @@
 "use client";
 import React, { createContext, useEffect, useState } from "react";
-import useTransactionSocket from "@/hooks/socket/useTransactionSocket";
-import { getCookie } from "typescript-cookie";
+import useTransactionSocket from "@/hooks/socket/useTransaction";
 
 export const TransactionContext = createContext({});
 
@@ -10,11 +9,11 @@ export const TransactionProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [isConnected, setIsConnected] = useState(false);
+  // const [isConnected, setIsConnected] = useState(false);
 
-  const [idToken, setIdToken] = useState<string>("");
+  // const [idToken, setIdToken] = useState<string>("");
 
-  // const transactionSocket = useTransactionSocket(idToken);
+  // const transactionSocket = useTransaction(idToken);
 
   // useEffect(() => {
   //   if (typeof document !== undefined) {

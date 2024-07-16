@@ -33,7 +33,7 @@ export default function UserProfile() {
             <Title level={4} className="mt-5 font-normal">
               Vendor
             </Title>
-            <Title level={4}>Đào Công Trí</Title>
+            <Title level={4}>Dao Cong Tri</Title>
             <QRCodeVendor /><br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow

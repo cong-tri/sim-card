@@ -1,25 +1,34 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context/MainProvider";
 import Image from "next/image";
 import { UserContext } from "@/context/UserProvider";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
+import { Qrcode } from "@/types/types";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [qrcode, setQRCode] = useState<Qrcode>();
 
   const data: any = useContext(UserContext);
-
+  
   const { userId, signInDetails }: any = useContext(MainContext);
 
+  useEffect(() => { 
+    if (data != "") {
+      setQRCode(data)
+    }
+  }, [data])
+  
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Open QR CODE</Button>
       <Modal
         title="QR CODE"
         open={isModalOpen}
+        centered
         onCancel={() => setIsModalOpen(false)}
         onClose={() => setIsModalOpen(false)}
         footer={
@@ -116,8 +125,9 @@ export default function QRCodeVendor() {
           <Col>
             <Button
               type="primary"
-              href={"/images/qrcode.png"}
-              download={true}
+              href={"/images/qrcode.jpg"}
+              target="_blank"
+              // download={true}
               htmlType="button"
             >
               Download
@@ -128,4 +138,3 @@ export default function QRCodeVendor() {
     </>
   );
 }
-//https://sim-card-seven.vercel.app/images/qrcode.png

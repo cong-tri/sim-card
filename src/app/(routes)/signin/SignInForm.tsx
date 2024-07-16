@@ -10,14 +10,9 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import { SignInInput, signIn } from "aws-amplify/auth";
+import { FieldType } from "@/types/types";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
-
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
-};
 
 export default function SignInForm() {
   const [form] = Form.useForm();
