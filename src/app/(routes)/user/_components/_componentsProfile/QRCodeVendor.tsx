@@ -105,7 +105,7 @@ export default function QRCodeVendor() {
                     <Form.Item
                       name="url"
                       initialValue={
-                        "https://sim-card-seven.vercel.app/images/qrcode.png"
+                        "https://sim-card-seven.vercel.app/images/qrcode.jpg"
                       }
                     >
                       <Input disabled size={"large"} />
@@ -126,8 +126,7 @@ export default function QRCodeVendor() {
             <Button
               type="primary"
               href={"/images/qrcode.jpg"}
-              target="_blank"
-              // download={true}
+              download={true}
               htmlType="button"
             >
               Download
