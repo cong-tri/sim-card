@@ -54,7 +54,7 @@ export default function UpdateProfileForm() {
   const [form] = useForm();
   return (
     <Form
-      // form={form}
+      form={form}
       name="update"
       autoComplete="off"
       onFinish={onFinish}
