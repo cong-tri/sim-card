@@ -30,7 +30,8 @@ export const useTransaction = (manager: Manager) => {
     queryFn: async () => {
       const qrCodeAsync: Promise<Transaction[]> = new Promise((resolve) => {
         client.emit("info", {
-          id: "666863229c4962324ceab295",
+          fromDate: "2024-07-11",
+          toDate: "2024-07-20",
         });
         client.on("info", (data: Transaction[]) => resolve(data));
       });

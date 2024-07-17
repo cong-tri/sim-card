@@ -5,25 +5,65 @@ export type Qrcode = {
 };
 
 // type format FieldType of signin form
-export type FieldType = {
+export type FieldTypeSignin = {
   username?: string;
   password?: string;
   remember?: string;
 };
 
+// type format FieldTypeUpdateUser of update user's contribute form
+export type FieldTypeUpdateUser = {
+  userId: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  city: string;
+  country: string;
+  description: string;
+};
+
 // type format Transaction of return data from socket io namespace '/transaction'
 export type Transaction = {
-  id: string,
-  date: string | Date,
-  service: string,
-  product: string,
-  amount: number,
-  currency: string,
-  read: boolean,
+  id: string;
+  date: string | Date;
+  service: string;
+  product: string;
+  amount: number;
+  currency: string;
+  read: boolean;
 };
 
 // type format UserProvider for data of UserProvider
 export type DataUserProvider = {
-  qrcode: Qrcode | null,
-  transaction: Transaction[] | null,
-}
+  qrcode: Qrcode | null;
+  transaction: Transaction[] | null;
+};
+
+// type format UserProvider for data of UserProvider
+export type DataMainProvider = {
+  user: CurrentUser | null;
+  userAttributes: UserAttributes | null;
+};
+
+// type format user contribute
+export type UserAttributes = {
+  sub: string;
+  email_verified: string;
+  phone_number_verified: string;
+  phone_number: string;
+  given_name: string;
+  family_name: string;
+  email: string;
+};
+
+// type format current user
+export type CurrentUser = {
+  username: string;
+  userId: string;
+  signInDetails: {
+    loginId: string;
+    authFlowType: string;
+  };
+};

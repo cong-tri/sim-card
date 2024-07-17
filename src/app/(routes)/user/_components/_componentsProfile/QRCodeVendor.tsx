@@ -5,28 +5,43 @@ import Image from "next/image";
 import { UserContext } from "@/context/UserProvider";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { DataUserProvider, Qrcode } from "@/types/types";
+import { CurrentUser, DataMainProvider, DataUserProvider, Qrcode } from "@/types/types";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
+  const [user, setUser] = useState<CurrentUser>();
 
-  const data = useContext(UserContext);
-  const { userId, signInDetails }: any = useContext(MainContext);
-
+  const dataUserContext = useContext(UserContext);
+  const dataMainContext = useContext(MainContext);
+  
   useEffect(() => {
-    const getData = async (data: DataUserProvider) => {
+    const getDataUserContext = async (dataUserContext: DataUserProvider) => {
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
-        if (data?.qrcode) {
-          resolve(data.qrcode);
+        if (dataUserContext?.qrcode) {
+          resolve(dataUserContext.qrcode);
         }
       });
       const dataQrcode = await qrCodeAsync;
       setQRCode(dataQrcode);
     };
-    getData(data as DataUserProvider);
-  }, [data]);
+    getDataUserContext(dataUserContext as DataUserProvider);
+  }, [dataUserContext]);
+
+  useEffect(() => {
+    const getDataMainContext = async (dataMainContext: DataMainProvider) => {
+      const userAsync: Promise<CurrentUser> = new Promise((resolve) => {
+        if (dataMainContext?.user) {
+          resolve(dataMainContext?.user);
+        }
+      });
+      const user = await userAsync;
+      setUser(user)
+    };
+    getDataMainContext(dataMainContext as DataMainProvider);
+  }, [dataMainContext])
+  
 
   return (
     <>
@@ -71,9 +86,9 @@ export default function QRCodeVendor() {
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>DAO CONG TRI</Title>
           <Title level={4}>
-            Phone: {!signInDetails?.loginId ? "" : signInDetails?.loginId}
+            Phone: {!user?.signInDetails?.loginId ? "" : user?.signInDetails?.loginId}
           </Title>
-          <Title level={4}>ID: {!userId ? "" : userId}</Title>
+          <Title level={4}>ID: {!user?.userId ? "" : user?.userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>

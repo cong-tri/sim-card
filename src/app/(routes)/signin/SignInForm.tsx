@@ -10,7 +10,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import { SignInInput, signIn } from "aws-amplify/auth";
-import { FieldType } from "@/types/types";
+import { FieldTypeSignin } from "@/types/types";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
@@ -53,7 +53,7 @@ export default function SignInForm() {
         style={{ width: 800 }}
       >
         <Title level={3}>Username:</Title>
-        <Form.Item<FieldType>
+        <Form.Item<FieldTypeSignin>
           name="username"
           style={{ width: "100%" }}
           rules={[{ required: true, message: "Please input your username!" }]}
@@ -63,7 +63,7 @@ export default function SignInForm() {
         </Form.Item>
 
         <Title level={3}>Password:</Title>
-        <Form.Item<FieldType>
+        <Form.Item<FieldTypeSignin>
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
           initialValue={"Tri@2024"}

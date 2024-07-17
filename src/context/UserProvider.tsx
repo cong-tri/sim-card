@@ -6,6 +6,7 @@ import { Manager } from "socket.io-client";
 import { useAuth } from "@/hooks/socket/useAuth";
 import { useTransaction } from "@/hooks/socket/useTransaction";
 import { DataUserProvider, Qrcode, Transaction } from "@/types/types";
+import { usePayment } from "@/hooks/socket/usePayment";
 
 export const UserContext = createContext({});
 
@@ -20,6 +21,7 @@ export const UserProvider = ({
 
   useAuth(manager as Manager);
   useTransaction(manager as Manager);
+  // usePayment(manager as Manager)
 
   const [qrcode, setQRCode] = useState<Qrcode>();
   const [transaction, setTransaction] = useState<Transaction[]>();
