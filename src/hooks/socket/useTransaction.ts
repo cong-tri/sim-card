@@ -1,20 +1,43 @@
 "use client";
 
-// import useManagerSocket from "./useManager";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Manager, Socket } from "socket.io-client";
+import { useSocketIO } from "./useSocket";
+import { Transaction } from "@/types/types";
 
-const useTransaction = (idToken: string) => {
-  // const manager = useManager();
+export const useTransaction = (manager: Manager) => {
+  const socket = useSocketIO(manager, "transaction");
 
-  // if (!manager) {
-  //   return;
-  // }
+  const [client, setClient] = useState<Socket>(socket as Socket);
 
-  // const transactionSocket = manager.socket("/transaction", {
-  //   auth: {
-  //     token: idToken !== "" ? idToken : "",
-  //   },
-  // });
-  // return transactionSocket;
+  useEffect(() => {
+    socket?.connect();
+    socket?.on("connect", () => {
+      if (socket.connected) {
+        // console.log("Connection >>", socket.connected);
+        setClient(socket);
+      }
+    });
+    // disconnect_exception: server socket io api of ccsidd extends
+    socket?.on("disconnect_exception", (err: string) => {
+      console.log("err >>", err);
+    });
+  }, [socket]);
+
+  useQuery({
+    queryKey: ["transaction"],
+    queryFn: async () => {
+      const qrCodeAsync: Promise<Transaction[]> = new Promise((resolve) => {
+        client.emit("info", {
+          id: "666863229c4962324ceab295",
+        });
+        client.on("info", (data: Transaction[]) => resolve(data));
+      });
+      const data = await qrCodeAsync;
+      return data;
+    },
+    enabled: !!client,
+    staleTime: 1000 * 60 * 60 * 24,
+  });
 };
-
-export default useTransaction;

@@ -1,10 +1,11 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/socket/useAuth";
 import { ManagerContext } from "./ManagerProvider";
 import { Manager } from "socket.io-client";
-import { Qrcode } from "@/types/types";
+import { useAuth } from "@/hooks/socket/useAuth";
+import { useTransaction } from "@/hooks/socket/useTransaction";
+import { DataUserProvider, Qrcode, Transaction } from "@/types/types";
 
 export const UserContext = createContext({});
 
@@ -16,20 +17,43 @@ export const UserProvider = ({
   const queryClient = useQueryClient();
 
   const manager = useContext(ManagerContext);
+
   useAuth(manager as Manager);
+  useTransaction(manager as Manager);
 
   const [qrcode, setQRCode] = useState<Qrcode>();
+  const [transaction, setTransaction] = useState<Transaction[]>();
 
-  const getData = async () => {
-    const qrCodeAsync = new Promise((resolve) => {
-      const data = queryClient.getQueryData(["qrcode"]);
+  const getDataQuery = async () => {
+    // promise function for await get data qrcode from query 'qrcode'
+    const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
+      const data: any | null = queryClient.getQueryData(["qrcode"]);
       if (data !== undefined) {
-        resolve(data);
+        resolve(data as Qrcode);
       }
     });
-    const data: Qrcode | any = await qrCodeAsync;
-    setQRCode(data)
+    const dataQrcode = await qrCodeAsync;
+    setQRCode(dataQrcode);
+
+    // promise function for await get data transaction from query 'transaction'
+    const transactionAsync: Promise<Transaction[]> = new Promise((resolve) => {
+      const data: any | null = queryClient.getQueryData(["transaction"]);
+      if (data !== undefined) {
+        resolve(data as Transaction[]);
+      }
+    });
+    const dataTransaction = await transactionAsync;
+    setTransaction(dataTransaction);
   };
-  getData();
-  return <UserContext.Provider value={!qrcode ? "" : qrcode}>{children}</UserContext.Provider>;
+  getDataQuery();
+
+  const data: DataUserProvider = {
+    qrcode: !qrcode ? null : qrcode,
+    transaction: !transaction ? null : transaction,
+  }
+  return (
+    <UserContext.Provider value={data}>
+      {children}
+    </UserContext.Provider>
+  );
 };

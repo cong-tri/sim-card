@@ -10,7 +10,6 @@ export const useAuth = (manager: Manager) => {
   const socket = useSocketIO(manager, "auth");
 
   const [client, setClient] = useState<Socket>(socket as Socket);
-  // const [qrcode, setQRcode] = useState<Qrcode>();
 
   useEffect(() => {
     socket?.connect();
@@ -29,12 +28,10 @@ export const useAuth = (manager: Manager) => {
   useQuery({
     queryKey: ["qrcode"],
     queryFn: async () => {
-
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
         client.emit("qrcode", (data: any) => resolve(data.qrcode));
       });
-
-      const data = await qrCodeAsync;
+      const data: Qrcode = await qrCodeAsync;
       return data;
     },
     enabled: !!client,

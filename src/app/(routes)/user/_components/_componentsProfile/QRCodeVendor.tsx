@@ -5,23 +5,29 @@ import Image from "next/image";
 import { UserContext } from "@/context/UserProvider";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { Qrcode } from "@/types/types";
+import { DataUserProvider, Qrcode } from "@/types/types";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
 
-  const data: any = useContext(UserContext);
-  
+  const data = useContext(UserContext);
   const { userId, signInDetails }: any = useContext(MainContext);
 
-  useEffect(() => { 
-    if (data != "") {
-      setQRCode(data)
-    }
-  }, [data])
-  
+  useEffect(() => {
+    const getData = async (data: DataUserProvider) => {
+      const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
+        if (data?.qrcode) {
+          resolve(data.qrcode);
+        }
+      });
+      const dataQrcode = await qrCodeAsync;
+      setQRCode(dataQrcode);
+    };
+    getData(data as DataUserProvider);
+  }, [data]);
+
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Open QR CODE</Button>
@@ -44,7 +50,7 @@ export default function QRCodeVendor() {
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
             <Image
-              src={data?.ios}
+              src={qrcode?.ios as string}
               alt="QR Code for ios"
               width={200}
               height={200}
@@ -54,7 +60,7 @@ export default function QRCodeVendor() {
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
             <Image
-              src={data?.android}
+              src={qrcode?.android as string}
               alt="QR Code for android"
               width={200}
               height={200}
@@ -113,9 +119,7 @@ export default function QRCodeVendor() {
                   </Col>
                   <Col>
                     <Form.Item>
-                      <Button htmlType="submit">
-                        Copy url
-                      </Button>
+                      <Button htmlType="submit">Copy url</Button>
                     </Form.Item>
                   </Col>
                 </Row>
