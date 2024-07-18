@@ -1,7 +1,7 @@
 /** @format */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { MenuProps } from "antd";
@@ -17,42 +17,53 @@ import { Amplify } from "aws-amplify";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { getCurrentUser, signOut } from "aws-amplify/auth";
+import { MainContext } from "@/context/MainProvider";
+import { CurrentUser, DataMainProvider } from "@/types/types";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
+  const dataMainContext = useContext(MainContext);
+
   const router = useRouter();
   const pathname = usePathname();
 
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<CurrentUser | {}>({});
   const [current, setCurrent] = useState<string>(
-    Object.keys(user).length != 0 ? pathname : "/signin"
-  );
+    Object.keys(user).length == 0 ? "/signin" : pathname);
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(!currentUser ? {} : currentUser);
-        setCurrent(!currentUser ? "/signin" : pathname);
-      } catch (error) {
-        setUser({});
+      if (!dataMainContext) {
+        return;
+      } else {
+        const data = dataMainContext as DataMainProvider;
+        setUser(!data.user ? {} : data.user)
+        setCurrent(!data.user ? "/signin" : pathname)
       }
     };
-
     fetchUser();
+
     router.refresh();
-  }, [router, pathname]);
+    // router.push(pathname);
+  }, [router, pathname, dataMainContext]);
 
   const menuItems: MenuItem[] = [
     {
       key: "account",
       label: "User",
       icon: <UserOutlined />,
-      children: Object.keys(user).length != 0
+      children: Object.keys(user).length === 0
         ? [
+          {
+            key: "/signin",
+            label: <Link href={"/signin"}>Sign In</Link>,
+            icon: <LoginOutlined />,
+          },
+        ]
+        : [
           {
             key: "/user",
             label: <Link href={"/user"}>DashBoard User</Link>,
@@ -62,13 +73,6 @@ const MenuItems: React.FC = () => {
             key: "signout",
             label: "Sign Out",
             icon: <LogoutOutlined />,
-          },
-        ]
-        : [
-          {
-            key: "/signin",
-            label: <Link href={"/signin"}>Sign In</Link>,
-            icon: <LoginOutlined />,
           },
         ],
     },
@@ -84,11 +88,12 @@ const MenuItems: React.FC = () => {
       setCurrent("/signin");
 
       message.success("Log out success", 2, () => {
-        router.refresh()
+        router.refresh();
         router.push("/signin");
       });
     }
   };
+
   return (
     <Menu
       onClick={onClick}

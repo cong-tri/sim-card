@@ -1,65 +1,35 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { MainContext } from "@/context/MainProvider";
 import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import {
-  CurrentUser,
-  DataUserProvider,
-  Qrcode,
-  UserAttributes,
-} from "@/types/types";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { DataMainProvider, DataUserProvider, Qrcode } from "@/types/types";
 
-export default function QRCodeVendor() {
+export default function QRCodeVendor({ props }: any) {
+  const { user, userAttributes } = props as DataMainProvider;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
-  const [user, setUser] = useState<CurrentUser>();
-  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
 
   const dataUserContext = useContext(UserContext);
-  const dataMainContext = useContext(MainContext);
 
   useEffect(() => {
-    if (!dataMainContext) {
-      return;
-    }
-    setUser(dataMainContext as CurrentUser);
-  }, [dataMainContext]);
-
-  useEffect(() => {
-    const getDataUserContext = async (dataUserContext: DataUserProvider) => {
-      const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
-        if (dataUserContext?.qrcode) {
-          resolve(dataUserContext.qrcode);
-        }
-      });
-      const dataQrcode = await qrCodeAsync;
-      setQRCode(dataQrcode);
-    };
-    getDataUserContext(dataUserContext as DataUserProvider);
-  }, [dataUserContext]);
-
-  useEffect(() => {
-    const getUserAttributes = async () => {
-      const data = await fetchUserAttributes();
-
-      if (!data) return;
-      else {
-        if (!userAttributes) {
-          setUserAttributes(data as UserAttributes);
-        }
+    const getQrcode = async () => {
+      if (!dataUserContext) {
+      } else {
+        const data = dataUserContext as DataUserProvider;
+        if (!data.qrcode) return;
+        else setQRCode(data.qrcode);
       }
     };
-    getUserAttributes();
-  }, [userAttributes]);
+    getQrcode();
+  }, [dataUserContext]);
 
-  if (!user || !qrcode || !userAttributes) {
-    return;
-  }
+  if (!user || !qrcode || !userAttributes) return;
+  else;
+
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Open QR CODE</Button>

@@ -24,8 +24,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AntdRegistry>
-          <MenuItems />
           <MainProvider>
+            <MenuItems />
             <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
           </MainProvider>
         </AntdRegistry>

@@ -1,6 +1,8 @@
-// "use client";
+"use client";
 
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { MainContext } from "@/context/MainProvider";
+import { CurrentUser, DataMainProvider, UserAttributes } from "@/types/types";
 import { Avatar, Button, Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined } from "@ant-design/icons";
@@ -8,6 +10,43 @@ import UpdateProfileForm from "./_componentsProfile/UpdateProfileForm";
 import QRCodeVendor from "./_componentsProfile/QRCodeVendor";
 
 export default function UserProfile() {
+  const dataMainContext = useContext(MainContext);
+  
+  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
+  const [user, setUser] = useState<CurrentUser>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!dataMainContext) return;
+      else {
+        const data = dataMainContext as DataMainProvider;
+        if (!data.user) return;
+        else setUser(data.user);
+      }
+    };
+
+    fetchUser();
+  }, [dataMainContext]);
+
+  useEffect(() => {
+    const getUserAttributes = async () => {
+      if (!dataMainContext) return;
+      else {
+        const data = dataMainContext as DataMainProvider;
+        if (!data.userAttributes) return;
+        else setUserAttributes(data.userAttributes);
+      }
+    };
+    getUserAttributes();
+  }, [dataMainContext]);
+
+  if (!userAttributes || !user) {
+    return;
+  }
+  const props: DataMainProvider = {
+    user,
+    userAttributes
+  }
   return (
     <>
       <Row
@@ -25,7 +64,7 @@ export default function UserProfile() {
               Complete Your Profile
             </Title>
           </div>
-          <UpdateProfileForm />
+          <UpdateProfileForm props={props}/>
         </Col>
         <Col xs={24} lg={8}>
           <div className="border-2 rounded-2xl py-14 text-center ">
@@ -33,8 +72,9 @@ export default function UserProfile() {
             <Title level={4} className="mt-5 font-normal">
               Vendor
             </Title>
-            <Title level={4}>Dao Cong Tri</Title>
-            <QRCodeVendor /><br />
+            <Title level={4}>{userAttributes.family_name} {userAttributes.given_name}</Title>
+            <QRCodeVendor props={props}/>
+            <br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow
             </Button>

@@ -1,51 +1,17 @@
 /** @format */
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import TextArea from "antd/es/input/TextArea";
 import { useForm } from "antd/es/form/Form";
-import {
-  CurrentUser,
-  FieldTypeUpdateUser,
-  UserAttributes,
-} from "@/types/types";
-import { MainContext } from "@/context/MainProvider";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { DataMainProvider, FieldTypeUpdateUser } from "@/types/types";
 
-export default function UpdateProfileForm() {
+export default function UpdateProfileForm({ props }: any) {
   const [form] = useForm();
+  const { user, userAttributes } = props as DataMainProvider;
 
-  const [user, setUser] = useState<CurrentUser>();
-  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
-
-  const dataMainContext: any = useContext(MainContext);
-
-  useEffect(() => {
-    if (!dataMainContext) {
-      return;
-    }
-    setUser(dataMainContext as CurrentUser);
-  }, [dataMainContext]);
-
-  useEffect(() => {
-    const getUserAttributes = async () => {
-      const data = await fetchUserAttributes();
-
-      if (!data) return;
-      else {
-        if (!userAttributes) {
-          setUserAttributes(data as UserAttributes);
-        }
-      }
-    };
-    getUserAttributes();
-  }, [userAttributes]);
-
-  if (!userAttributes || !user) {
-    return;
-  }
+  if (!user || !userAttributes) return;
 
   const onFinish = (values: any) => {
     console.log(values);

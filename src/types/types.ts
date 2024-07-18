@@ -63,3 +63,9 @@ export type CurrentUser = {
     authFlowType: string;
   };
 };
+
+// type format MainProvider for data of UserProvider
+export type DataMainProvider = {
+  user: CurrentUser | null;
+  userAttributes: UserAttributes | null;
+};
