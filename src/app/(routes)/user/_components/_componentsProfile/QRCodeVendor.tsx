@@ -5,13 +5,20 @@ import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { CurrentUser, DataUserProvider, Qrcode } from "@/types/types";
+import {
+  CurrentUser,
+  DataUserProvider,
+  Qrcode,
+  UserAttributes,
+} from "@/types/types";
+import { fetchUserAttributes } from "aws-amplify/auth";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
   const [user, setUser] = useState<CurrentUser>();
+  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
 
   const dataUserContext = useContext(UserContext);
   const dataMainContext = useContext(MainContext);
@@ -36,7 +43,21 @@ export default function QRCodeVendor() {
     getDataUserContext(dataUserContext as DataUserProvider);
   }, [dataUserContext]);
 
-  if (!user || !qrcode) {
+  useEffect(() => {
+    const getUserAttributes = async () => {
+      const data = await fetchUserAttributes();
+
+      if (!data) return;
+      else {
+        if (!userAttributes) {
+          setUserAttributes(data as UserAttributes);
+        }
+      }
+    };
+    getUserAttributes();
+  }, [userAttributes]);
+
+  if (!user || !qrcode || !userAttributes) {
     return;
   }
   return (
@@ -80,11 +101,17 @@ export default function QRCodeVendor() {
           </Col>
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
-          <Title>DAO CONG TRI</Title>
-          <Title level={4}>
-            Phone: +84326034561
+          <Title>
+            Vendor:{" "}
+            {!userAttributes.family_name || !userAttributes.given_name
+              ? ""
+              : `${userAttributes.family_name} ${userAttributes.given_name}`}
           </Title>
-          <Title level={4}>ID: {!user?.userId ? "" : user?.userId}</Title>
+          <Title level={4}>
+            Phone:{" "}
+            {!userAttributes.phone_number ? "" : userAttributes.phone_number}
+          </Title>
+          <Title level={4}>ID: {!user.userId ? "" : user.userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>
