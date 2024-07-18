@@ -82,8 +82,7 @@ export default function QRCodeVendor() {
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>DAO CONG TRI</Title>
           <Title level={4}>
-            Phone:{" "}
-            {!user.signInDetails.loginId ? "" : user.signInDetails.loginId}
+            Phone: +84326034561
           </Title>
           <Title level={4}>ID: {!user?.userId ? "" : user?.userId}</Title>
         </div>
