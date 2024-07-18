@@ -5,15 +5,23 @@ import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { DataUserProvider, Qrcode } from "@/types/types";
+import { CurrentUser, DataUserProvider, Qrcode } from "@/types/types";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
+  const [user, setUser] = useState<CurrentUser>();
 
   const dataUserContext = useContext(UserContext);
-  const { userId, signInDetails }: any = useContext(MainContext);
+  const dataMainContext = useContext(MainContext);
+
+  useEffect(() => {
+    if (!dataMainContext) {
+      return;
+    }
+    setUser(dataMainContext as CurrentUser);
+  }, [dataMainContext]);
 
   useEffect(() => {
     const getDataUserContext = async (dataUserContext: DataUserProvider) => {
@@ -28,6 +36,9 @@ export default function QRCodeVendor() {
     getDataUserContext(dataUserContext as DataUserProvider);
   }, [dataUserContext]);
 
+  if (!user || !qrcode) {
+    return;
+  }
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Open QR CODE</Button>
@@ -71,9 +82,10 @@ export default function QRCodeVendor() {
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>DAO CONG TRI</Title>
           <Title level={4}>
-            Phone: {!signInDetails?.loginId ? "" : signInDetails?.loginId}
+            Phone:{" "}
+            {!user.signInDetails.loginId ? "" : user.signInDetails.loginId}
           </Title>
-          <Title level={4}>ID: {!userId ? "" : userId}</Title>
+          <Title level={4}>ID: {!user?.userId ? "" : user?.userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>

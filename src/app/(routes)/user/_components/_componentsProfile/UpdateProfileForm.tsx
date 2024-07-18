@@ -71,7 +71,7 @@ export default function UpdateProfileForm() {
                 message: "Please enter an id with format string.",
               },
             ]}
-            initialValue={user?.userId as string}
+            initialValue={user.userId}
           >
             <Input placeholder="your id" size="middle" disabled />
           </Form.Item>
@@ -82,7 +82,7 @@ export default function UpdateProfileForm() {
             name="username"
             style={{ width: "100%" }}
             rules={[{ required: true, message: "Please input your username!" }]}
-            initialValue={user?.username as string}
+            initialValue={user.username}
           >
             <Input placeholder="your username" size="middle" disabled />
           </Form.Item>
@@ -99,7 +99,7 @@ export default function UpdateProfileForm() {
                 message: "Please input the correct format email",
               },
             ]}
-            initialValue={userAttributes?.email}
+            initialValue={userAttributes.email}
           >
             <Input placeholder="your email" size="middle" />
           </Form.Item>
@@ -116,7 +116,7 @@ export default function UpdateProfileForm() {
                 message: "Please input the correct format name",
               },
             ]}
-            initialValue={userAttributes?.family_name as string}
+            initialValue={userAttributes.family_name}
           >
             <Input placeholder="your family name" size="middle" />
           </Form.Item>
@@ -129,7 +129,7 @@ export default function UpdateProfileForm() {
             rules={[
               { required: true, message: "Please input your last name!" },
             ]}
-            initialValue={userAttributes?.given_name as string}
+            initialValue={userAttributes.given_name}
           >
             <Input placeholder="your given name" size="middle" />
           </Form.Item>
@@ -149,7 +149,7 @@ export default function UpdateProfileForm() {
                 message: "Please input the correct format phone number",
               },
             ]}
-            initialValue={userAttributes?.phone_number as string}
+            initialValue={userAttributes.phone_number}
           >
             <Input placeholder="your cellphone number" size="middle" />
           </Form.Item>
@@ -162,7 +162,7 @@ export default function UpdateProfileForm() {
             rules={[
               { required: true, message: "Please input your zone info!" },
             ]}
-            initialValue={userAttributes?.zoneinfo as string}
+            initialValue={userAttributes.zoneinfo}
           >
             <Input placeholder="your city" size="middle" />
           </Form.Item>
@@ -173,7 +173,7 @@ export default function UpdateProfileForm() {
             name="locale"
             style={{ width: "100%" }}
             rules={[{ required: true, message: "Please input your locale!" }]}
-            initialValue={userAttributes?.locale}
+            initialValue={userAttributes.locale}
           >
             <Input placeholder="your locale" size="middle" />
           </Form.Item>
