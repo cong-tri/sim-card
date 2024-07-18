@@ -11,7 +11,7 @@ import QRCodeVendor from "./_componentsProfile/QRCodeVendor";
 
 export default function UserProfile() {
   const dataMainContext = useContext(MainContext);
-  
+
   const [userAttributes, setUserAttributes] = useState<UserAttributes>();
   const [user, setUser] = useState<CurrentUser>();
 
@@ -44,9 +44,9 @@ export default function UserProfile() {
     return;
   }
   const props: DataMainProvider = {
-    user,
-    userAttributes
-  }
+    user: user ? user : null,
+    userAttributes: userAttributes ? userAttributes : null,
+  };
   return (
     <>
       <Row
@@ -64,7 +64,7 @@ export default function UserProfile() {
               Complete Your Profile
             </Title>
           </div>
-          <UpdateProfileForm props={props}/>
+          <UpdateProfileForm props={props} />
         </Col>
         <Col xs={24} lg={8}>
           <div className="border-2 rounded-2xl py-14 text-center ">
@@ -72,8 +72,10 @@ export default function UserProfile() {
             <Title level={4} className="mt-5 font-normal">
               Vendor
             </Title>
-            <Title level={4}>{userAttributes.family_name} {userAttributes.given_name}</Title>
-            <QRCodeVendor props={props}/>
+            <Title level={4}>
+              {userAttributes?.family_name} {userAttributes?.given_name}
+            </Title>
+            <QRCodeVendor props={props} />
             <br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow

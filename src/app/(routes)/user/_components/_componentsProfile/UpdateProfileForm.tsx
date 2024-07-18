@@ -1,16 +1,30 @@
 /** @format */
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { useForm } from "antd/es/form/Form";
-import { DataMainProvider, FieldTypeUpdateUser } from "@/types/types";
+import { CurrentUser, DataMainProvider, FieldTypeUpdateUser, UserAttributes } from "@/types/types";
 
 export default function UpdateProfileForm({ props }: any) {
   const [form] = useForm();
-  const { user, userAttributes } = props as DataMainProvider;
 
+  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
+  const [user, setUser] = useState<CurrentUser>();
+  useEffect(() => {
+    if (!props) return
+    else{
+      const data = props as DataMainProvider;
+      if (!data.user || !data.userAttributes) return
+      else {
+        setUser(data.user)  
+        setUserAttributes(data.userAttributes)
+      }
+    }
+      
+  }, [props])
+  
   if (!user || !userAttributes) return;
 
   const onFinish = (values: any) => {
@@ -37,7 +51,7 @@ export default function UpdateProfileForm({ props }: any) {
                 message: "Please enter an id with format string.",
               },
             ]}
-            initialValue={user.userId}
+            initialValue={user?.userId ?? ""}
           >
             <Input placeholder="your id" size="middle" disabled />
           </Form.Item>
@@ -48,7 +62,7 @@ export default function UpdateProfileForm({ props }: any) {
             name="username"
             style={{ width: "100%" }}
             rules={[{ required: true, message: "Please input your username!" }]}
-            initialValue={user.username}
+            initialValue={user?.username ?? ""}
           >
             <Input placeholder="your username" size="middle" disabled />
           </Form.Item>
@@ -65,7 +79,7 @@ export default function UpdateProfileForm({ props }: any) {
                 message: "Please input the correct format email",
               },
             ]}
-            initialValue={userAttributes.email}
+            initialValue={userAttributes?.email ?? ""}
           >
             <Input placeholder="your email" size="middle" />
           </Form.Item>
@@ -82,7 +96,7 @@ export default function UpdateProfileForm({ props }: any) {
                 message: "Please input the correct format name",
               },
             ]}
-            initialValue={userAttributes.family_name}
+            initialValue={userAttributes?.family_name ?? ""}
           >
             <Input placeholder="your family name" size="middle" />
           </Form.Item>
@@ -95,7 +109,7 @@ export default function UpdateProfileForm({ props }: any) {
             rules={[
               { required: true, message: "Please input your last name!" },
             ]}
-            initialValue={userAttributes.given_name}
+            initialValue={userAttributes?.given_name ?? ""}
           >
             <Input placeholder="your given name" size="middle" />
           </Form.Item>
@@ -115,7 +129,7 @@ export default function UpdateProfileForm({ props }: any) {
                 message: "Please input the correct format phone number",
               },
             ]}
-            initialValue={userAttributes.phone_number}
+            initialValue={userAttributes?.phone_number ?? ""}
           >
             <Input placeholder="your cellphone number" size="middle" />
           </Form.Item>
@@ -128,7 +142,7 @@ export default function UpdateProfileForm({ props }: any) {
             rules={[
               { required: true, message: "Please input your zone info!" },
             ]}
-            initialValue={userAttributes.zoneinfo}
+            initialValue={userAttributes?.zoneinfo ?? ""}
           >
             <Input placeholder="your city" size="middle" />
           </Form.Item>
@@ -139,7 +153,7 @@ export default function UpdateProfileForm({ props }: any) {
             name="locale"
             style={{ width: "100%" }}
             rules={[{ required: true, message: "Please input your locale!" }]}
-            initialValue={userAttributes.locale}
+            initialValue={userAttributes?.locale ?? ""}
           >
             <Input placeholder="your locale" size="middle" />
           </Form.Item>

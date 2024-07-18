@@ -4,14 +4,15 @@ import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { DataMainProvider, DataUserProvider, Qrcode } from "@/types/types";
+import { CurrentUser, DataMainProvider, DataUserProvider, Qrcode, UserAttributes } from "@/types/types";
 
 export default function QRCodeVendor({ props }: any) {
-  const { user, userAttributes } = props as DataMainProvider;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
+  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
+  const [user, setUser] = useState<CurrentUser>();
 
   const dataUserContext = useContext(UserContext);
 
@@ -27,8 +28,20 @@ export default function QRCodeVendor({ props }: any) {
     getQrcode();
   }, [dataUserContext]);
 
-  if (!user || !qrcode || !userAttributes) return;
-  else;
+  useEffect(() => {
+    if (!props) return
+    else{
+      const data = props as DataMainProvider;
+      if (!data.user || !data.userAttributes) return
+      else {
+        setUser(data.user)  
+        setUserAttributes(data.userAttributes)
+      }
+    }
+      
+  }, [props])
+  
+  if (!user || !userAttributes || !qrcode) return;
 
   return (
     <>
@@ -72,16 +85,13 @@ export default function QRCodeVendor({ props }: any) {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor:{" "}
-            {!userAttributes.family_name || !userAttributes.given_name
-              ? ""
-              : `${userAttributes.family_name} ${userAttributes.given_name}`}
+            Vendor: {userAttributes?.family_name ?? ""} {userAttributes?.given_name ?? ""}
           </Title>
           <Title level={4}>
             Phone:{" "}
-            {!userAttributes.phone_number ? "" : userAttributes.phone_number}
+            {userAttributes?.phone_number ?? ""}
           </Title>
-          <Title level={4}>ID: {!user.userId ? "" : user.userId}</Title>
+          <Title level={4}>ID: {user?.userId ?? ""}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>

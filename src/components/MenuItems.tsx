@@ -31,8 +31,7 @@ const MenuItems: React.FC = () => {
   const pathname = usePathname();
 
   const [user, setUser] = useState<CurrentUser | {}>({});
-  const [current, setCurrent] = useState<string>(
-    Object.keys(user).length == 0 ? "/signin" : pathname);
+  const [current, setCurrent] = useState<string>(!user ? "/signin" : pathname);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -40,14 +39,14 @@ const MenuItems: React.FC = () => {
         return;
       } else {
         const data = dataMainContext as DataMainProvider;
-        setUser(!data.user ? {} : data.user)
-        setCurrent(!data.user ? "/signin" : pathname)
+        setUser(!data.user ? {} : data.user);
+        setCurrent(!data.user ? "/signin" : pathname);
       }
     };
     fetchUser();
 
     router.refresh();
-    // router.push(pathname);
+    router.push(pathname);
   }, [router, pathname, dataMainContext]);
 
   const menuItems: MenuItem[] = [
@@ -55,26 +54,27 @@ const MenuItems: React.FC = () => {
       key: "account",
       label: "User",
       icon: <UserOutlined />,
-      children: Object.keys(user).length === 0
-        ? [
-          {
-            key: "/signin",
-            label: <Link href={"/signin"}>Sign In</Link>,
-            icon: <LoginOutlined />,
-          },
-        ]
-        : [
-          {
-            key: "/user",
-            label: <Link href={"/user"}>DashBoard User</Link>,
-            icon: <ProfileOutlined />,
-          },
-          {
-            key: "signout",
-            label: "Sign Out",
-            icon: <LogoutOutlined />,
-          },
-        ],
+      children:
+        Object.keys(user).length === 0
+          ? [
+              {
+                key: "/signin",
+                label: <Link href={"/signin"}>Sign In</Link>,
+                icon: <LoginOutlined />,
+              },
+            ]
+          : [
+              {
+                key: "/user",
+                label: <Link href={"/user"}>DashBoard User</Link>,
+                icon: <ProfileOutlined />,
+              },
+              {
+                key: "signout",
+                label: "Sign Out",
+                icon: <LogoutOutlined />,
+              },
+            ],
     },
   ];
 
