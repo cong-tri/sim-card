@@ -16,12 +16,11 @@ export type FieldTypeUpdateUser = {
   userId: string;
   username: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  city: string;
-  country: string;
-  description: string;
+  family_name: string;
+  given_name: string;
+  phone_number: string;
+  zoneinfo: string;
+  locale: string;
 };
 
 // type format Transaction of return data from socket io namespace '/transaction'
@@ -41,18 +40,15 @@ export type DataUserProvider = {
   transaction: Transaction[] | null;
 };
 
-// type format UserProvider for data of UserProvider
-export type DataMainProvider = {
-  user: CurrentUser | null;
-  userAttributes: UserAttributes | null;
-};
 
 // type format user contribute
 export type UserAttributes = {
   sub: string;
+  zoneinfo: string;
   email_verified: string;
   phone_number_verified: string;
   phone_number: string;
+  locale: string;
   given_name: string;
   family_name: string;
   email: string;

@@ -1,21 +1,20 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context/MainProvider";
-import Image from "next/image";
 import { UserContext } from "@/context/UserProvider";
+import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { CurrentUser, DataMainProvider, DataUserProvider, Qrcode } from "@/types/types";
+import { DataUserProvider, Qrcode } from "@/types/types";
 
 export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
-  const [user, setUser] = useState<CurrentUser>();
 
   const dataUserContext = useContext(UserContext);
-  const dataMainContext = useContext(MainContext);
-  
+  const { userId, signInDetails }: any = useContext(MainContext);
+
   useEffect(() => {
     const getDataUserContext = async (dataUserContext: DataUserProvider) => {
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
@@ -28,20 +27,6 @@ export default function QRCodeVendor() {
     };
     getDataUserContext(dataUserContext as DataUserProvider);
   }, [dataUserContext]);
-
-  useEffect(() => {
-    const getDataMainContext = async (dataMainContext: DataMainProvider) => {
-      const userAsync: Promise<CurrentUser> = new Promise((resolve) => {
-        if (dataMainContext?.user) {
-          resolve(dataMainContext?.user);
-        }
-      });
-      const user = await userAsync;
-      setUser(user)
-    };
-    getDataMainContext(dataMainContext as DataMainProvider);
-  }, [dataMainContext])
-  
 
   return (
     <>
@@ -86,9 +71,9 @@ export default function QRCodeVendor() {
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>DAO CONG TRI</Title>
           <Title level={4}>
-            Phone: {!user?.signInDetails?.loginId ? "" : user?.signInDetails?.loginId}
+            Phone: {!signInDetails?.loginId ? "" : signInDetails?.loginId}
           </Title>
-          <Title level={4}>ID: {!user?.userId ? "" : user?.userId}</Title>
+          <Title level={4}>ID: {!userId ? "" : userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>

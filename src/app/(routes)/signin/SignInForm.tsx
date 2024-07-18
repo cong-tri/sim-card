@@ -23,9 +23,6 @@ export default function SignInForm() {
       const response = await signIn({
         username,
         password,
-        options: {
-          authFlowType: "USER_PASSWORD_AUTH",
-        },
       });
 
       if (
