@@ -16,33 +16,33 @@ export default function UserProfile() {
   const [user, setUser] = useState<CurrentUser>();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!dataMainContext) return;
+    if (!dataMainContext) return;
+    else {
+      const data = dataMainContext as DataMainProvider;
+      if (!data.user || !data.userAttributes) return;
       else {
-        const data = dataMainContext as DataMainProvider;
-        if (!data.user) return;
-        else setUser(data.user);
+        setUser(data.user);
+        setUserAttributes(data.userAttributes);
       }
-    };
+    }
+  }, [dataMainContext, user, userAttributes]);
 
-    fetchUser();
-  }, [dataMainContext]);
-
-  useEffect(() => {
-    const getUserAttributes = async () => {
-      if (!dataMainContext) return;
-      else {
-        const data = dataMainContext as DataMainProvider;
-        if (!data.userAttributes) return;
-        else setUserAttributes(data.userAttributes);
-      }
-    };
-    getUserAttributes();
-  }, [dataMainContext]);
+  // useEffect(() => {
+  //   const getUserAttributes = async () => {
+  //     if (!dataMainContext) return;
+  //     else {
+  //       const data = dataMainContext as DataMainProvider;
+  //       if (!data.userAttributes) return;
+  //       else setUserAttributes(data.userAttributes);
+  //     }
+  //   };
+  //   getUserAttributes();
+  // }, [dataMainContext]);
 
   if (!userAttributes || !user) {
     return;
   }
+
   const props: DataMainProvider = {
     user: user ? user : null,
     userAttributes: userAttributes ? userAttributes : null,

@@ -23,7 +23,7 @@ export default function UpdateProfileForm({ props }: any) {
       }
     }
       
-  }, [props])
+  }, [props, user, userAttributes])
   
   if (!user || !userAttributes) return;
 

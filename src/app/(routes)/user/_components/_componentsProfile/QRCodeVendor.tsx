@@ -4,10 +4,15 @@ import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
 import { Button, Col, Form, Input, message, Modal, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { CurrentUser, DataMainProvider, DataUserProvider, Qrcode, UserAttributes } from "@/types/types";
+import {
+  CurrentUser,
+  DataMainProvider,
+  DataUserProvider,
+  Qrcode,
+  UserAttributes,
+} from "@/types/types";
 
 export default function QRCodeVendor({ props }: any) {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
@@ -29,19 +34,18 @@ export default function QRCodeVendor({ props }: any) {
   }, [dataUserContext]);
 
   useEffect(() => {
-    if (!props) return
-    else{
+    if (!props) return;
+    else {
       const data = props as DataMainProvider;
-      if (!data.user || !data.userAttributes) return
+      if (!data.user || !data.userAttributes) return;
       else {
-        setUser(data.user)  
-        setUserAttributes(data.userAttributes)
+        setUser(data.user);
+        setUserAttributes(data.userAttributes);
       }
     }
-      
-  }, [props])
-  
-  if (!user || !userAttributes || !qrcode) return;
+  }, [props, user, userAttributes]);
+
+  if (!qrcode || !user || !userAttributes) return;
 
   return (
     <>
@@ -85,12 +89,10 @@ export default function QRCodeVendor({ props }: any) {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {userAttributes?.family_name ?? ""} {userAttributes?.given_name ?? ""}
+            Vendor: {userAttributes?.family_name ?? ""}{" "}
+            {userAttributes?.given_name ?? ""}
           </Title>
-          <Title level={4}>
-            Phone:{" "}
-            {userAttributes?.phone_number ?? ""}
-          </Title>
+          <Title level={4}>Phone: {userAttributes?.phone_number ?? ""}</Title>
           <Title level={4}>ID: {user?.userId ?? ""}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">

@@ -46,21 +46,13 @@ export const MainProvider = ({
     getUserAttributes();
   }, [userAttributes]);
 
-  useEffect(() => {
-    if (!user || !userAttributes) return;
-    else {
-      const data: DataMainProvider = {
-        user,
-        userAttributes,
-      };
-      if (!dataMainContext) {
-        setDataMainContext(data);
-      }
-    }
-  }, [dataMainContext, user, userAttributes]);
+  const data: DataMainProvider = {
+    user: user ?? null,
+    userAttributes: userAttributes ?? null,
+  };
 
   return (
-    <MainContext.Provider value={!dataMainContext ? {} : dataMainContext}>
+    <MainContext.Provider value={data}>
       {children}
     </MainContext.Provider>
   );
