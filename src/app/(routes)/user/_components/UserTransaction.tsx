@@ -12,14 +12,15 @@ export default function UserTransaction() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction[]>();
+  const [detailTransaction, setDetailTransaction] = useState<any>();
 
   useEffect(() => {
     if (!dataUserContext) return;
-    else{
+    else {
       const data = dataUserContext as DataUserProvider;
-      if(!data.transaction) return;
-      else setTransaction(data.transaction)
-    } 
+      if (!data.transaction) return;
+      else setTransaction(data.transaction);
+    }
   }, [dataUserContext]);
 
   const listTransaction = transaction?.map((item, index) => {
@@ -29,18 +30,21 @@ export default function UserTransaction() {
         ? `Transaction ${index + 1}`
         : `Transaction ${index + 1} (Unread)`,
       description: `You purchased ${item.product}, service: ${item.service}.`,
-      details: (<>
-        <Typography>
-          You already have payment a transaction: <br />
-          ID: {item.id}. <br />
-          Product Name: {item.product}. <br />
-          Service: {item.service}. <br />
-          Date: {item.date as string}. <br />
-          Cost: {item.amount} {item.currency}
-        </Typography>
-      </>)
+      details: (
+        <>
+          <Typography>
+            You already have payment a transaction: <br />
+            ID: {item.id}. <br />
+            Product Name: {item.product}. <br />
+            Service: {item.service}. <br />
+            Date: {formatDatetime(item.date as string)}. <br />
+            Cost: {item.amount} {item.currency}
+          </Typography>
+        </>
+      ),
     };
   });
+  
   return (
     <>
       <div className="my-8 px-14">
@@ -59,7 +63,15 @@ export default function UserTransaction() {
                     htmlType="button"
                     type="primary"
                     key={index}
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      if (!listTransaction) return;
+                      else {
+                        if (!listTransaction[index].details) return;
+                        else
+                          setDetailTransaction(listTransaction[index].details);
+                      }
+                    }}
                   >
                     Read
                   </Button>
@@ -78,7 +90,7 @@ export default function UserTransaction() {
                     }
                     onCancel={() => setIsModalOpen(false)}
                   >
-                    {item.details}
+                    {detailTransaction ?? ""}
                   </Modal>
                 </>,
               ]}
@@ -93,4 +105,19 @@ export default function UserTransaction() {
       </div>
     </>
   );
+}
+
+function formatDatetime(datetime: string) {
+  const date = new Date(datetime);
+  const formattedDate = date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false, // 24-hour format
+    timeZone: "UTC", // Ensure the time is displayed in UTC
+  });
+  return formattedDate;
 }

@@ -21,7 +21,7 @@ export const UserProvider = ({
 
   useAuth(manager as Manager);
   useTransaction(manager as Manager);
-  
+
   const [qrcode, setQRCode] = useState<Qrcode>();
   const [transaction, setTransaction] = useState<Transaction[]>();
 

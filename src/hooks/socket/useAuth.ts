@@ -8,7 +8,7 @@ import { Qrcode } from "@/types/types";
 
 export const useAuth = (manager: Manager) => {
   const socket = useSocketIO(manager, "auth");
-  
+
   const [qrcode, setQrcode] = useState<Qrcode>();
   const [client, setClient] = useState<Socket>(socket as Socket);
 
@@ -29,6 +29,7 @@ export const useAuth = (manager: Manager) => {
 
   useEffect(() => {
     const getQrcode = async () => {
+      // promise function for await get data qrcode from query 'qrcode'
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
         if (!client) return;
         client.emit("qrcode", (data: any) => {

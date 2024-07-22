@@ -28,6 +28,7 @@ export const useTransaction = (manager: Manager) => {
 
   useEffect(() => {
     const getTransaction = async () => {
+      // promise function for await get data transaction from query 'transaction'
       const transactionAsync: Promise<Transaction[]> = new Promise(
         (resolve) => {
           if (!client) return;
