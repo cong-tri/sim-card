@@ -2,7 +2,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
 import Image from "next/image";
-import { Button, Col, Form, Input, message, Modal, Row } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Typography,
+} from "antd";
 import Title from "antd/es/typography/Title";
 import {
   CurrentUser,
@@ -11,6 +20,8 @@ import {
   Qrcode,
   UserAttributes,
 } from "@/types/types";
+import Paragraph from "antd/es/typography/Paragraph";
+const { Text } = Typography;
 
 export default function QRCodeVendor({ props }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +37,8 @@ export default function QRCodeVendor({ props }: any) {
       if (!dataUserContext) {
       } else {
         const data = dataUserContext as DataUserProvider;
+        // console.log(data);
+
         if (!data.qrcode) return;
         else setQRCode(data.qrcode);
       }
@@ -117,33 +130,12 @@ export default function QRCodeVendor({ props }: any) {
                 </>
               }
             >
-              <Form
-                name="basic"
-                autoComplete="off"
-                onFinish={(values) => {
-                  navigator.clipboard.writeText(values.url);
-                  message.success("Success copy to clipboard.", 2);
-                }}
-                style={{ width: "100%" }}
-              >
-                <Row align={"middle"} gutter={16}>
-                  <Col span={18}>
-                    <Form.Item
-                      name="url"
-                      initialValue={
-                        "https://sim-card-seven.vercel.app/images/qrcode.jpg"
-                      }
-                    >
-                      <Input disabled size={"large"} />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item>
-                      <Button htmlType="submit">Copy url</Button>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Form>
+              <Title level={4}>
+                Link:{" "}
+                <Text copyable>
+                  https://sim-card-seven.vercel.app/images/qrcode.jpg
+                </Text>
+              </Title>
             </Modal>
           </Col>
           <Col>

@@ -3,12 +3,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context/MainProvider";
 import { CurrentUser, DataMainProvider, UserAttributes } from "@/types/types";
-import { Avatar, Button, Col, Row } from "antd";
+import { Avatar, Button, Col, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined } from "@ant-design/icons";
-import UpdateProfileForm from "./_componentsProfile/UpdateProfileForm";
-import QRCodeVendor from "./_componentsProfile/QRCodeVendor";
+import QRCodeVendor from "./QRCodeVendor";
 
+const { Text } = Typography;
 export default function UserProfile() {
   const dataMainContext = useContext(MainContext);
 
@@ -27,18 +27,6 @@ export default function UserProfile() {
     }
   }, [dataMainContext, user, userAttributes]);
 
-  // useEffect(() => {
-  //   const getUserAttributes = async () => {
-  //     if (!dataMainContext) return;
-  //     else {
-  //       const data = dataMainContext as DataMainProvider;
-  //       if (!data.userAttributes) return;
-  //       else setUserAttributes(data.userAttributes);
-  //     }
-  //   };
-  //   getUserAttributes();
-  // }, [dataMainContext]);
-
   if (!userAttributes || !user) {
     return;
   }
@@ -55,18 +43,56 @@ export default function UserProfile() {
         align={"top"}
         justify={"center"}
       >
-        <Col xs={24} lg={16} className="border-2 rounded-2xl py-10 px-4">
+        <Col xs={24} lg={18} className="border-2 rounded-2xl py-10 px-4">
           <div className="rounded-2xl bg-blue-500 p-4 mb-5">
             <Title level={2} className="pb-2 mb-0">
-              Edit Profile
-            </Title>
-            <Title level={4} className="m-0">
-              Complete Your Profile
+              Information
             </Title>
           </div>
-          <UpdateProfileForm props={props} />
+          <Row align={"top"} gutter={16}>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                UserId: <Text>{user?.userId ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Username: <Text>{user?.username ?? ""}</Text>{" "}
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Email Address: <Text>{userAttributes?.email ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                First Name: <Text>{userAttributes?.family_name ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Last Name: <Text>{userAttributes?.given_name ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Phone Number: <Text>{userAttributes?.phone_number ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Zone Info: <Text>{userAttributes?.zoneinfo ?? ""}</Text>
+              </Title>
+            </Col>
+            <Col xs={24} md={12} lg={8}>
+              <Title level={4}>
+                Locale: <Text>{userAttributes?.locale ?? ""}</Text>
+              </Title>
+            </Col>
+          </Row>
         </Col>
-        <Col xs={24} lg={8}>
+        <Col xs={24} lg={6}>
           <div className="border-2 rounded-2xl py-14 text-center ">
             <Avatar size={100} icon={<UserOutlined />} />
             <Title level={4} className="mt-5 font-normal">

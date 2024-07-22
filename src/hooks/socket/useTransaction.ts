@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ export const useTransaction = (manager: Manager) => {
   const socket = useSocketIO(manager, "transaction");
 
   const [client, setClient] = useState<Socket>(socket as Socket);
+  const [transaction, setTransaction] = useState<Transaction[]>();
 
   useEffect(() => {
     socket?.connect();
@@ -25,20 +26,38 @@ export const useTransaction = (manager: Manager) => {
     });
   }, [socket]);
 
+  useEffect(() => {
+    const getTransaction = async () => {
+      const transactionAsync: Promise<Transaction[]> = new Promise(
+        (resolve) => {
+          if (!client) return;
+
+          client.emit("info", {
+            fromDate: "2024-07-11",
+            toDate: "2024-07-20",
+          });
+          client.on("info", (data: Transaction[]) => {
+            if (!data) return;
+            resolve(data);
+          });
+        }
+      );
+      const data = await transactionAsync;
+      setTransaction(data);
+
+      if (!transaction) return;
+      else return transaction;
+    };
+    getTransaction();
+  }, [client, transaction]);
+
   useQuery({
     queryKey: ["transaction"],
-    queryFn: async () => {
-      const qrCodeAsync: Promise<Transaction[]> = new Promise((resolve) => {
-        client.emit("info", {
-          fromDate: "2024-07-11",
-          toDate: "2024-07-20",
-        });
-        client.on("info", (data: Transaction[]) => resolve(data));
-      });
-      const data = await qrCodeAsync;
-      return data;
+    queryFn: () => {
+      if (!transaction) return;
+      else return transaction;
     },
-    enabled: !!client,
+    enabled: !!transaction,
     staleTime: 1000 * 60 * 60 * 24,
   });
 };

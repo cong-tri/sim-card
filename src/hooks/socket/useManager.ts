@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { Manager } from "socket.io-client";
 
