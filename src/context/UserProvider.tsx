@@ -45,8 +45,12 @@ export const UserProvider = ({
   getDataQuery();
 
   const data: DataUserProvider = {
-    qrcode: !qrcode ? null : qrcode,
-    transaction: !transaction ? null : transaction,
+    qrcode: qrcode ?? null,
+    transaction: transaction ?? null,
   };
-  return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={!data.qrcode || !data.transaction ? {} : data}>
+      {children}
+    </UserContext.Provider>
+  );
 };

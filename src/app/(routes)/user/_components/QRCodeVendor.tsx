@@ -31,16 +31,16 @@ export default function QRCodeVendor({ props }: any) {
     if (!dataUserContext) {
     } else {
       const data = dataUserContext as DataUserProvider;
-      if (!data.qrcode) console.log("return");
+      if (!data.qrcode) return;
       else setQRCode(data.qrcode);
     }
   }, [dataUserContext]);
 
   useEffect(() => {
-    if (!props) console.log("return");
+    if (!props) return;
     else {
       const data = props as DataMainProvider;
-      if (!data.user || !data.userAttributes) console.log("return");
+      if (!data.user || !data.userAttributes) return;
       else {
         setUser(data.user);
         setUserAttributes(data.userAttributes);
@@ -48,7 +48,7 @@ export default function QRCodeVendor({ props }: any) {
     }
   }, [props, user, userAttributes]);
 
-  if (!qrcode || !user || !userAttributes) console.log("return");
+  if (!qrcode || !user || !userAttributes) return;
 
   return (
     <>

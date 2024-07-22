@@ -10,31 +10,29 @@ import QRCodeVendor from "./QRCodeVendor";
 
 const { Text } = Typography;
 export default function UserProfile() {
-  const dataMainContext = useContext(MainContext);
+  let dataMainContext = useContext(MainContext);
+  const data = dataMainContext as DataMainProvider;
 
-  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
-  const [user, setUser] = useState<CurrentUser>();
+  const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
+  const [user, setUser] = useState<CurrentUser | null>();
 
   useEffect(() => {
-    if (!dataMainContext) console.log("return");
+    if (!data) return;
     else {
-      const data = dataMainContext as DataMainProvider;
-      if (!data.user || !data.userAttributes) console.log("return");
+      if (!data.user || !data.userAttributes) return;
       else {
         setUser(data.user);
         setUserAttributes(data.userAttributes);
       }
     }
-  }, [dataMainContext, user, userAttributes]);
+  }, [data, user, userAttributes]);
 
-  if (!userAttributes || !user) {
-    console.log("return");
-  }
+  if (!user || !userAttributes) return;
 
   const props: DataMainProvider = {
-    user: user ? user : null,
-    userAttributes: userAttributes ? userAttributes : null,
-  };
+    user: user ?? null,
+    userAttributes: userAttributes ?? null
+  }
   return (
     <>
       <Row
@@ -101,7 +99,7 @@ export default function UserProfile() {
             <Title level={4}>
               {userAttributes?.family_name} {userAttributes?.given_name}
             </Title>
-            <QRCodeVendor props={props} />
+            <QRCodeVendor props={props}/>
             <br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow

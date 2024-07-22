@@ -13,19 +13,16 @@ export const MainProvider = ({
 }>) => {
   const [user, setUser] = useState<CurrentUser | null>();
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
-  const [dataMainContext, setDataMainContext] =
-    useState<DataMainProvider | null>();
+  const [dataMainContext, setDataMainContext] = useState<
+    DataMainProvider | {}
+  >();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await getCurrentUser();
         if (!data) return;
-        else {
-          if (!user) {
-            setUser(data as CurrentUser);
-          }
-        }
+        else setUser(data as CurrentUser);
       } catch (error) {}
     };
     fetchUser();
@@ -46,13 +43,20 @@ export const MainProvider = ({
     getUserAttributes();
   }, [userAttributes]);
 
-  const data: DataMainProvider = {
-    user: user ?? null,
-    userAttributes: userAttributes ?? null,
-  };
+  useEffect(() => {
+    if (!user || !userAttributes) {
+      return;
+    } else {
+      const data: DataMainProvider = {
+        user,
+        userAttributes,
+      };
+      setDataMainContext(data);
+    }
+  }, [user, userAttributes]);
 
   return (
-    <MainContext.Provider value={data}>
+    <MainContext.Provider value={dataMainContext ?? {}}>
       {children}
     </MainContext.Provider>
   );
