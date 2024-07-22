@@ -16,10 +16,10 @@ export default function UserProfile() {
   const [user, setUser] = useState<CurrentUser>();
 
   useEffect(() => {
-    if (!dataMainContext) return;
+    if (!dataMainContext) console.log("return");
     else {
       const data = dataMainContext as DataMainProvider;
-      if (!data.user || !data.userAttributes) return;
+      if (!data.user || !data.userAttributes) console.log("return");
       else {
         setUser(data.user);
         setUserAttributes(data.userAttributes);
@@ -28,7 +28,7 @@ export default function UserProfile() {
   }, [dataMainContext, user, userAttributes]);
 
   if (!userAttributes || !user) {
-    return;
+    console.log("return");
   }
 
   const props: DataMainProvider = {
