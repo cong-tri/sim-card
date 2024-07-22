@@ -8,25 +8,19 @@ import Title from "antd/es/typography/Title";
 import Typography from "antd/es/typography/Typography";
 
 export default function UserTransaction() {
-  const data = useContext(UserContext);
+  const dataUserContext = useContext(UserContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction[]>();
 
   useEffect(() => {
-    const getData = async (data: DataUserProvider) => {
-      const transactionAsync: Promise<Transaction[]> = new Promise(
-        (resolve) => {
-          if (data.transaction != null) {
-            resolve(data.transaction);
-          }
-        }
-      );
-      const dataTransaction = await transactionAsync;
-      setTransaction(dataTransaction);
-    };
-    getData(data as DataUserProvider);
-  }, [data]);
+    if (!dataUserContext) return;
+    else{
+      const data = dataUserContext as DataUserProvider;
+      if(!data.transaction) return;
+      else setTransaction(data.transaction)
+    } 
+  }, [dataUserContext]);
 
   const listTransaction = transaction?.map((item, index) => {
     return {

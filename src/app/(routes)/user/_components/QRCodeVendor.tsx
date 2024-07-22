@@ -1,17 +1,10 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Typography,
-} from "antd";
+import { Button, Col, Modal, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import {
   CurrentUser,
@@ -20,7 +13,7 @@ import {
   Qrcode,
   UserAttributes,
 } from "@/types/types";
-import Paragraph from "antd/es/typography/Paragraph";
+
 const { Text } = Typography;
 
 export default function QRCodeVendor({ props }: any) {
@@ -30,20 +23,17 @@ export default function QRCodeVendor({ props }: any) {
   const [userAttributes, setUserAttributes] = useState<UserAttributes>();
   const [user, setUser] = useState<CurrentUser>();
 
+  const queryClient = useQueryClient();
+
   const dataUserContext = useContext(UserContext);
 
   useEffect(() => {
-    const getQrcode = async () => {
-      if (!dataUserContext) {
-      } else {
-        const data = dataUserContext as DataUserProvider;
-        // console.log(data);
-
-        if (!data.qrcode) return;
-        else setQRCode(data.qrcode);
-      }
-    };
-    getQrcode();
+    if (!dataUserContext) {
+    } else {
+      const data = dataUserContext as DataUserProvider;
+      if (!data.qrcode) return;
+      else setQRCode(data.qrcode);
+    }
   }, [dataUserContext]);
 
   useEffect(() => {
@@ -62,7 +52,14 @@ export default function QRCodeVendor({ props }: any) {
 
   return (
     <>
-      <Button onClick={() => setIsModalOpen(true)}>Open QR CODE</Button>
+      <Button
+        onClick={async () => {
+          await queryClient.prefetchQuery({ queryKey: ["qrcode"] });
+          setIsModalOpen(true);
+        }}
+      >
+        Open QR CODE
+      </Button>
       <Modal
         title="QR CODE"
         open={isModalOpen}

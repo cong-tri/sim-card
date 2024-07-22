@@ -21,28 +21,23 @@ export const UserProvider = ({
 
   useAuth(manager as Manager);
   useTransaction(manager as Manager);
-  // usePayment(manager as Manager)
-
+  
   const [qrcode, setQRCode] = useState<Qrcode>();
   const [transaction, setTransaction] = useState<Transaction[]>();
 
   const getDataQuery = async () => {
     // promise function for await get data qrcode from query 'qrcode'
     const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
-      const data: any | null = queryClient.getQueryData(["qrcode"]);
-      if (data !== undefined) {
-        resolve(data as Qrcode);
-      }
+      const data: any = queryClient.getQueryData(["qrcode"]);
+      if (data) resolve(data as Qrcode);
     });
     const dataQrcode = await qrCodeAsync;
     setQRCode(dataQrcode);
 
     // promise function for await get data transaction from query 'transaction'
     const transactionAsync: Promise<Transaction[]> = new Promise((resolve) => {
-      const data: any | null = queryClient.getQueryData(["transaction"]);
-      if (data !== undefined) {
-        resolve(data as Transaction[]);
-      }
+      const data: any = queryClient.getQueryData(["transaction"]);
+      if (data) resolve(data as Transaction[]);
     });
     const dataTransaction = await transactionAsync;
     setTransaction(dataTransaction);
@@ -52,10 +47,6 @@ export const UserProvider = ({
   const data: DataUserProvider = {
     qrcode: !qrcode ? null : qrcode,
     transaction: !transaction ? null : transaction,
-  }
-  return (
-    <UserContext.Provider value={data}>
-      {children}
-    </UserContext.Provider>
-  );
+  };
+  return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
 };
