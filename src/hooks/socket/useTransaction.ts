@@ -1,4 +1,3 @@
-// "use client";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -32,10 +31,9 @@ export const useTransaction = (manager: Manager) => {
       const transactionAsync: Promise<Transaction[]> = new Promise(
         (resolve) => {
           if (!client) return;
-
           client.emit("info", {
-            fromDate: "2024-07-11",
-            toDate: "2024-07-20",
+            fromDate: "2024-07-16",
+            toDate: "2024-07-25",
           });
           client.on("info", (data: Transaction[]) => {
             if (!data) return;

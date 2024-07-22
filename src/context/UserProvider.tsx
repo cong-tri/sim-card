@@ -6,7 +6,6 @@ import { Manager } from "socket.io-client";
 import { useAuth } from "@/hooks/socket/useAuth";
 import { useTransaction } from "@/hooks/socket/useTransaction";
 import { DataUserProvider, Qrcode, Transaction } from "@/types/types";
-import { usePayment } from "@/hooks/socket/usePayment";
 
 export const UserContext = createContext({});
 
@@ -49,7 +48,7 @@ export const UserProvider = ({
     transaction: transaction ?? null,
   };
   return (
-    <UserContext.Provider value={!data.qrcode || !data.transaction ? {} : data}>
+    <UserContext.Provider value={data}>
       {children}
     </UserContext.Provider>
   );

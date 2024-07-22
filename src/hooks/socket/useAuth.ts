@@ -1,7 +1,5 @@
-// "use client";
-
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Manager, Socket } from "socket.io-client";
 import { useSocketIO } from "./useSocket";
 import { Qrcode } from "@/types/types";

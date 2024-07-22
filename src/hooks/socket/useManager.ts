@@ -1,5 +1,3 @@
-// "use client";
-
 import { Manager } from "socket.io-client";
 
 export const manager = new Manager("https://dev.ccsidd.com:9443", {

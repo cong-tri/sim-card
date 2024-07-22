@@ -9,19 +9,19 @@ import Typography from "antd/es/typography/Typography";
 
 export default function UserTransaction() {
   const dataUserContext = useContext(UserContext);
-  const data = dataUserContext as DataUserProvider;
-
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction[]>();
   const [detailTransaction, setDetailTransaction] = useState<any>();
-
+  
   useEffect(() => {
-    if (!data) return;
+    if (!dataUserContext) return;
     else {
+      const data = dataUserContext as DataUserProvider;
       if (!data.transaction) return;
       else setTransaction(data.transaction);
     }
-  }, [data]);
+  }, [dataUserContext]);
 
   const listTransaction = transaction?.map((item, index) => {
     return {
