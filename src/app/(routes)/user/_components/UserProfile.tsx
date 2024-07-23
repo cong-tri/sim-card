@@ -27,7 +27,7 @@ export default function UserProfile() {
     }
   }, [data, user, userAttributes]);
 
-  if (!user || !userAttributes) return;
+  // if (!user || !userAttributes) return;
 
   const props: DataMainProvider = {
     user: user ?? null,
