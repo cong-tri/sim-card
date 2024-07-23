@@ -75,11 +75,11 @@ export default function QRCodeVendor() {
         <Row align={"top"} gutter={20} justify={"center"}>
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
-            <QRCode value={qrcode.ios} size={200}/>
+            <QRCode value={'/?token='+ qrcode.ios} size={200}/>
           </Col>
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
-            <QRCode value={qrcode.android} size={200}/>
+            <QRCode value={'/?token='+ qrcode.android} size={200}/>
           </Col>
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
