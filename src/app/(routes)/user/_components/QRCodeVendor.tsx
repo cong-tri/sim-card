@@ -12,35 +12,40 @@ import {
   Qrcode,
   UserAttributes,
 } from "@/types/types";
+import { MainContext } from "@/context/MainProvider";
 
 const { Text } = Typography;
 
-export default function QRCodeVendor({ props }: any) {
+export default function QRCodeVendor() {
+  const dataUserContext = useContext(UserContext);
+  const dataMainContext = useContext(MainContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [qrcode, setQRCode] = useState<Qrcode>();
   const [userAttributes, setUserAttributes] = useState<UserAttributes>();
   const [user, setUser] = useState<CurrentUser>();
 
-  const data = useContext(UserContext);
+  useEffect(() => {
+    if (!dataMainContext) return;
+    else {
+      const data = dataMainContext as DataMainProvider;
+      if (!data) return;
+      if (!data.user || !data.userAttributes) return;
+      else {
+        setUser(data.user);
+        setUserAttributes(data.userAttributes);
+      }
+    }
+  }, [dataMainContext, user, userAttributes]);
 
   useEffect(() => {
-    if (!data) return;
-    setQRCode(data as Qrcode);
-  }, [data, qrcode]);
-
-  useEffect(() => {
-    if (!props) return;
-
-    const data = props as DataMainProvider;
-    if (!data.user || !data.userAttributes) return;
-
-    setUser(data.user);
-    setUserAttributes(data.userAttributes);
-
-  }, [props, user, userAttributes]);
+    if (!dataUserContext) return;
+    else setQRCode(dataUserContext as Qrcode);
+  }, [dataUserContext, qrcode]);
 
   if (!user || !userAttributes || !qrcode) return;
+  
   return (
     <>
       <Button

@@ -23,12 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AntdRegistry>
-          <MainProvider>
-            <MenuItems />
-            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
-          </MainProvider>
-        </AntdRegistry>
+        <ReactQueryClientProvider>
+          <AntdRegistry>
+            <MainProvider>
+              <MenuItems />
+              {children}
+            </MainProvider>
+          </AntdRegistry>
+        </ReactQueryClientProvider>
       </body>
     </html>
   );

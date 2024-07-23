@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Manager, Socket } from "socket.io-client";
 import { useSocketIO } from "./useSocket";
 import { Transaction } from "@/types/types";
 
-const queryKey = 'transaction'
+const queryKey = "transaction";
 
 export const useTransaction = (manager: Manager) => {
   const namespace: string = "transaction";

@@ -22,7 +22,7 @@ export const UserProvider = ({
 
   useEffect(() => {
     if (!data) return;
-    setQRCode(data as Qrcode);
+    else setQRCode(data as Qrcode);
   }, [data, qrcode]);
 
   return (

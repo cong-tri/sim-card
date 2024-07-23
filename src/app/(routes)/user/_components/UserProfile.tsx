@@ -12,25 +12,26 @@ const { Text } = Typography;
 export default function UserProfile() {
   const dataMainContext = useContext(MainContext);
 
-  const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
-  const [user, setUser] = useState<CurrentUser | null>();
+  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
+  const [user, setUser] = useState<CurrentUser>();
 
   useEffect(() => {
     if (!dataMainContext) return;
-
-    const data = dataMainContext as DataMainProvider;
-    if (!data.user || !data.userAttributes) return;
-
-    setUser(data.user);
-    setUserAttributes(data.userAttributes);
+    else {
+      const data = dataMainContext as DataMainProvider;
+      if (!data) return;
+      else {
+        if (!data.user || !data.userAttributes) return;
+        else {
+          setUser(data.user);
+          setUserAttributes(data.userAttributes);
+        }
+      }
+    }
   }, [dataMainContext, user, userAttributes]);
 
   if (!user || !userAttributes) return;
 
-  const props: DataMainProvider = {
-    user,
-    userAttributes,
-  };
   return (
     <>
       <Row
@@ -97,7 +98,7 @@ export default function UserProfile() {
             <Title level={4}>
               {userAttributes?.family_name} {userAttributes?.given_name}
             </Title>
-            <QRCodeVendor props={props} />
+            <QRCodeVendor />
             <br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow

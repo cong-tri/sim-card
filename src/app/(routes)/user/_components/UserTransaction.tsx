@@ -16,8 +16,8 @@ export default function UserTransaction() {
 
   useEffect(() => {
     if (data.length === 0) return;
-    else setTransaction(data as Transaction[]);
-  }, [data, transaction]);
+    setTransaction(data as Transaction[]);
+  }, [data]);
 
   if (!transaction) return;
 
