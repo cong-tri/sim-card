@@ -5,6 +5,7 @@ import UserProfile from "./_components/UserProfile";
 import UserTransaction from "./_components/UserTransaction";
 import { UserProvider } from "@/context/UserProvider";
 import { ManagerProvider } from "@/context/ManagerProvider";
+import { TransactionProvider } from "@/context/TransactionProvider";
 
 export default async function UserPage() {
   return (
@@ -12,8 +13,11 @@ export default async function UserPage() {
       <ManagerProvider>
         <UserProvider>
           <UserProfile />
-          <UserTransaction />
         </UserProvider>
+        
+        <TransactionProvider>
+          <UserTransaction />
+        </TransactionProvider>
       </ManagerProvider>
     </>
   );

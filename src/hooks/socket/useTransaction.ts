@@ -1,12 +1,15 @@
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Manager, Socket } from "socket.io-client";
 import { useSocketIO } from "./useSocket";
 import { Transaction } from "@/types/types";
 
+const queryKey = 'transaction'
+
 export const useTransaction = (manager: Manager) => {
-  const socket = useSocketIO(manager, "transaction");
+  const namespace: string = "transaction";
+  const socket = useSocketIO(manager, namespace);
 
   const [client, setClient] = useState<Socket>(socket as Socket);
   const [transaction, setTransaction] = useState<Transaction[]>();
@@ -45,18 +48,37 @@ export const useTransaction = (manager: Manager) => {
       setTransaction(data);
 
       if (!transaction) return;
-      else return transaction;
     };
     getTransaction();
   }, [client, transaction]);
 
   useQuery({
-    queryKey: ["transaction"],
+    queryKey: [queryKey],
     queryFn: () => {
       if (!transaction) return;
       else return transaction;
     },
     enabled: !!transaction,
-    staleTime: 1000 * 60 * 60 * 24,
   });
+};
+
+export const useGetTransactionQuery = () => {
+  const queryClient = useQueryClient();
+  const [transaction, setTransaction] = useState<Transaction[]>();
+
+  const getTransactionQuery = async () => {
+    // promise function for await get data transaction from query 'transaction'
+    const transactionAsync: Promise<Transaction[]> = new Promise((resolve) => {
+      const data: any = queryClient.getQueryData([queryKey]);
+      if (!data) return;
+      resolve(data as Transaction[]);
+    });
+    const data = await transactionAsync;
+    if (!data) return;
+    setTransaction(data);
+  };
+  getTransactionQuery();
+
+  if (!transaction) return;
+  else return transaction;
 };

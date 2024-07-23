@@ -1,29 +1,27 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "@/context/UserProvider";
-import { DataUserProvider, Transaction } from "@/types/types";
+import { TransactionContext } from "@/context/TransactionProvider";
 import { Button, List, Modal } from "antd";
 import Title from "antd/es/typography/Title";
 import Typography from "antd/es/typography/Typography";
+import { Transaction } from "@/types/types";
 
 export default function UserTransaction() {
-  const dataUserContext = useContext(UserContext);
-  
+  const data: any = useContext(TransactionContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction[]>();
   const [detailTransaction, setDetailTransaction] = useState<any>();
-  
-  useEffect(() => {
-    if (!dataUserContext) return;
-    else {
-      const data = dataUserContext as DataUserProvider;
-      if (!data.transaction) return;
-      else setTransaction(data.transaction);
-    }
-  }, [dataUserContext]);
 
-  const listTransaction = transaction?.map((item, index) => {
+  useEffect(() => {
+    if (data.length === 0) return;
+    else setTransaction(data as Transaction[]);
+  }, [data, transaction]);
+
+  if (!transaction) return;
+
+  const listTransaction = transaction.map((item, index) => {
     return {
       key: index,
       title: item.read
@@ -37,7 +35,7 @@ export default function UserTransaction() {
             ID: {item.id}. <br />
             Product Name: {item.product}. <br />
             Service: {item.service}. <br />
-            Date: {formatDatetime(item.date as string)}. <br />
+            Date: {formatDatetime(item.date)}. <br />
             Cost: {item.amount} {item.currency}
           </Typography>
         </>
@@ -107,7 +105,7 @@ export default function UserTransaction() {
   );
 }
 
-function formatDatetime(datetime: string) {
+function formatDatetime(datetime: string | Date) {
   const date = new Date(datetime);
   const formattedDate = date.toLocaleString("en-US", {
     year: "numeric",

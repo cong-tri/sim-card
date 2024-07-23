@@ -1,15 +1,14 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
+import { useCallQrcodeQuery } from "@/hooks/socket/useAuth";
 import { UserContext } from "@/context/UserProvider";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { Button, Col, Modal, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import {
   CurrentUser,
   DataMainProvider,
-  DataUserProvider,
   Qrcode,
   UserAttributes,
 } from "@/types/types";
@@ -23,18 +22,12 @@ export default function QRCodeVendor({ props }: any) {
   const [userAttributes, setUserAttributes] = useState<UserAttributes>();
   const [user, setUser] = useState<CurrentUser>();
 
-  const queryClient = useQueryClient();
-
-  const dataUserContext = useContext(UserContext);
+  const data = useContext(UserContext);
 
   useEffect(() => {
-    if (!dataUserContext) {
-    } else {
-      const data = dataUserContext as DataUserProvider;
-      if (!data.qrcode) return;
-      else setQRCode(data.qrcode);
-    }
-  }, [dataUserContext]);
+    if (!data) return;
+    else setQRCode(data as Qrcode);
+  }, [data, qrcode]);
 
   useEffect(() => {
     if (!props) return;
@@ -53,8 +46,9 @@ export default function QRCodeVendor({ props }: any) {
   return (
     <>
       <Button
-        onClick={async () => {
-          await queryClient.prefetchQuery({ queryKey: ["qrcode"] });
+        onClick={() => {
+          // await queryClient.prefetchQuery({ queryKey: ["qrcode"] });
+          useCallQrcodeQuery
           setIsModalOpen(true);
         }}
       >
@@ -74,12 +68,13 @@ export default function QRCodeVendor({ props }: any) {
           </>
         }
         width={500}
+        
       >
         <Row align={"top"} gutter={20} justify={"center"}>
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
             <Image
-              src={qrcode?.ios as string}
+              src={qrcode.ios}
               alt="QR Code for ios"
               width={200}
               height={200}
@@ -89,7 +84,7 @@ export default function QRCodeVendor({ props }: any) {
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
             <Image
-              src={qrcode?.android as string}
+              src={qrcode.android}
               alt="QR Code for android"
               width={200}
               height={200}
