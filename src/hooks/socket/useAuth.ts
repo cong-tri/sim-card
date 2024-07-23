@@ -7,7 +7,7 @@ import { Qrcode } from "@/types/types";
 const queryKey = "qrcode";
 
 export const useAuth = (manager: Manager) => {
-  const namespace: string = "auth"
+  const namespace: string = "auth";
   const socket = useSocketIO(manager, namespace);
 
   const [client, setClient] = useState<Socket>(socket as Socket);
@@ -33,7 +33,7 @@ export const useAuth = (manager: Manager) => {
       // promise function for await get data qrcode from query 'qrcode'
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
         if (!client) return;
-        client.emit(queryKey, (data: any) => {
+        client.emit(queryKey, { tokenOnly: true }, (data: any) => {
           if (!data) return;
           resolve(data.qrcode);
         });

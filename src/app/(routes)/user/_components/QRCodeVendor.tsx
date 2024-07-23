@@ -3,8 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useCallQrcodeQuery } from "@/hooks/socket/useAuth";
 import { UserContext } from "@/context/UserProvider";
-import Image from "next/image";
-import { Button, Col, Modal, Row, Typography } from "antd";
+import { Button, Col, Modal, QRCode, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import {
   CurrentUser,
@@ -41,7 +40,9 @@ export default function QRCodeVendor() {
 
   useEffect(() => {
     if (!dataUserContext) return;
-    else setQRCode(dataUserContext as Qrcode);
+    else {
+      setQRCode(dataUserContext as Qrcode);
+    }
   }, [dataUserContext, qrcode]);
 
   if (!user || !userAttributes || !qrcode) return;
@@ -74,29 +75,16 @@ export default function QRCodeVendor() {
         <Row align={"top"} gutter={20} justify={"center"}>
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
-            <Image
-              src={qrcode.ios}
-              alt="QR Code for ios"
-              width={200}
-              height={200}
-              quality={100}
-            />
+            <QRCode value={qrcode.ios} size={200}/>
           </Col>
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
-            <Image
-              src={qrcode.android}
-              alt="QR Code for android"
-              width={200}
-              height={200}
-              quality={100}
-            />
+            <QRCode value={qrcode.android} size={200}/>
           </Col>
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {userAttributes.given_name}{" "}
-            {userAttributes.family_name}
+            Vendor: {userAttributes.given_name} {userAttributes.family_name}
           </Title>
           <Title level={4}>Phone: {userAttributes.phone_number}</Title>
           <Title level={4}>ID: {user.userId}</Title>
