@@ -21,8 +21,7 @@ export const MainProvider = ({
     const fetchUser = async () => {
       try {
         const data = await getCurrentUser();
-        if (!data) return;
-        else setUser(data as CurrentUser);
+        setUser(data as CurrentUser);
       } catch (error) {}
     };
     fetchUser();
@@ -31,28 +30,23 @@ export const MainProvider = ({
   useEffect(() => {
     const getUserAttributes = async () => {
       try {
+        if (!user) return;
+
         const data = await fetchUserAttributes();
-        if (!data) return;
-        else {
-          if (!userAttributes) {
-            setUserAttributes(data as UserAttributes);
-          }
-        }
+        setUserAttributes(data as UserAttributes);
       } catch (error) {}
     };
     getUserAttributes();
-  }, [userAttributes]);
+  }, [user, userAttributes]);
 
   useEffect(() => {
-    if (!user || !userAttributes) {
-      return;
-    } else {
-      const data: DataMainProvider = {
-        user,
-        userAttributes,
-      };
-      setDataMainContext(data);
-    }
+    if (!user || !userAttributes) return;
+
+    const data: DataMainProvider = {
+      user,
+      userAttributes,
+    };
+    setDataMainContext(data);
   }, [user, userAttributes]);
 
   return (

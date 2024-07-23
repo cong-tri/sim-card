@@ -10,29 +10,27 @@ import QRCodeVendor from "./QRCodeVendor";
 
 const { Text } = Typography;
 export default function UserProfile() {
-  let dataMainContext = useContext(MainContext);
-  const data = dataMainContext as DataMainProvider;
+  const dataMainContext = useContext(MainContext);
 
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
   const [user, setUser] = useState<CurrentUser | null>();
 
   useEffect(() => {
-    if (!data) return;
-    else {
-      if (!data.user || !data.userAttributes) return;
-      else {
-        setUser(data.user);
-        setUserAttributes(data.userAttributes);
-      }
-    }
-  }, [data, user, userAttributes]);
+    if (!dataMainContext) return;
 
-  // if (!user || !userAttributes) return;
+    const data = dataMainContext as DataMainProvider;
+    if (!data.user || !data.userAttributes) return;
+
+    setUser(data.user);
+    setUserAttributes(data.userAttributes);
+  }, [dataMainContext, user, userAttributes]);
+
+  if (!user || !userAttributes) return;
 
   const props: DataMainProvider = {
-    user: user ?? null,
-    userAttributes: userAttributes ?? null
-  }
+    user,
+    userAttributes,
+  };
   return (
     <>
       <Row
@@ -99,7 +97,7 @@ export default function UserProfile() {
             <Title level={4}>
               {userAttributes?.family_name} {userAttributes?.given_name}
             </Title>
-            <QRCodeVendor props={props}/>
+            <QRCodeVendor props={props} />
             <br />
             <Button type="primary" htmlType="button" className="mt-5">
               Follow

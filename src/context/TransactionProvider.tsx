@@ -25,7 +25,7 @@ export const TransactionProvider = ({
 
   useEffect(() => {
     if (!data) return;
-    else setTransaction(data as Transaction[]);
+    setTransaction(data as Transaction[]);
   }, [data, transaction]);
 
   return (

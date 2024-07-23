@@ -81,12 +81,18 @@ export default function UserTransaction() {
                         type="primary"
                         danger
                         htmlType="button"
-                        onClick={() => setIsModalOpen(false)}
+                        onClick={() => {
+                          setIsModalOpen(false);
+                          setDetailTransaction(null);
+                        }}
                       >
                         Close
                       </Button>
                     }
-                    onCancel={() => setIsModalOpen(false)}
+                    onCancel={() => {
+                      setIsModalOpen(false);
+                      setDetailTransaction(null);
+                    }}
                   >
                     {detailTransaction ?? ""}
                   </Modal>

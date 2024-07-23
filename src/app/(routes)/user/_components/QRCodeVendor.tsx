@@ -26,29 +26,26 @@ export default function QRCodeVendor({ props }: any) {
 
   useEffect(() => {
     if (!data) return;
-    else setQRCode(data as Qrcode);
+    setQRCode(data as Qrcode);
   }, [data, qrcode]);
 
   useEffect(() => {
     if (!props) return;
-    else {
-      const data = props as DataMainProvider;
-      if (!data.user || !data.userAttributes) return;
-      else {
-        setUser(data.user);
-        setUserAttributes(data.userAttributes);
-      }
-    }
+
+    const data = props as DataMainProvider;
+    if (!data.user || !data.userAttributes) return;
+
+    setUser(data.user);
+    setUserAttributes(data.userAttributes);
+
   }, [props, user, userAttributes]);
 
-  if (!qrcode || !user || !userAttributes) return;
-
+  if (!user || !userAttributes || !qrcode) return;
   return (
     <>
       <Button
         onClick={() => {
-          // await queryClient.prefetchQuery({ queryKey: ["qrcode"] });
-          useCallQrcodeQuery
+          useCallQrcodeQuery;
           setIsModalOpen(true);
         }}
       >
@@ -68,13 +65,12 @@ export default function QRCodeVendor({ props }: any) {
           </>
         }
         width={500}
-        
       >
         <Row align={"top"} gutter={20} justify={"center"}>
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
             <Image
-              src={qrcode.ios}
+              src={qrcode?.ios ?? ""}
               alt="QR Code for ios"
               width={200}
               height={200}
@@ -84,7 +80,7 @@ export default function QRCodeVendor({ props }: any) {
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
             <Image
-              src={qrcode.android}
+              src={qrcode?.android ?? ""}
               alt="QR Code for android"
               width={200}
               height={200}

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import { Manager, Socket } from "socket.io-client";
@@ -10,15 +9,16 @@ export const useSocketIO = (
   manager: Manager,
   namespace: string
 ): Socket | undefined => {
-
   const [client, setClient] = useState<Socket>();
 
-  fetchAuthSession().then((session) => {    
-    const socket = manager.socket(`/${namespace}`, {
-      auth: { token: session?.tokens?.idToken?.toString() as string },
+  useEffect(() => {
+    fetchAuthSession().then((session) => {
+      const socket = manager.socket(`/${namespace}`, {
+        auth: { token: session?.tokens?.idToken?.toString() as string },
+      });
+      setClient(socket);
     });
-    setClient(socket);
-  });
+  }, [manager, namespace]);
 
   useEffect(() => {
     client &&
