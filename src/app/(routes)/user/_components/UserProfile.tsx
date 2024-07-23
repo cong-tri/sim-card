@@ -49,42 +49,42 @@ export default function UserProfile() {
           <Row align={"top"} gutter={16}>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                UserId: <Text>{user?.userId ?? ""}</Text>
+                UserId: <Text>{user.userId }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Username: <Text>{user?.username ?? ""}</Text>{" "}
+                Username: <Text>{user.username }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Email Address: <Text>{userAttributes?.email ?? ""}</Text>
+                Email Address: <Text>{userAttributes.email }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                First Name: <Text>{userAttributes?.family_name ?? ""}</Text>
+                First Name: <Text>{userAttributes.family_name }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Last Name: <Text>{userAttributes?.given_name ?? ""}</Text>
+                Last Name: <Text>{userAttributes.given_name }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Phone Number: <Text>{userAttributes?.phone_number ?? ""}</Text>
+                Phone Number: <Text>{userAttributes.phone_number }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Zone Info: <Text>{userAttributes?.zoneinfo ?? ""}</Text>
+                Zone Info: <Text>{userAttributes.zoneinfo }</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Locale: <Text>{userAttributes?.locale ?? ""}</Text>
+                Locale: <Text>{userAttributes.locale }</Text>
               </Title>
             </Col>
           </Row>
@@ -96,7 +96,7 @@ export default function UserProfile() {
               Vendor
             </Title>
             <Title level={4}>
-              {userAttributes?.family_name} {userAttributes?.given_name}
+              {userAttributes.given_name} {userAttributes.family_name}
             </Title>
             <QRCodeVendor />
             <br />

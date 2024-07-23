@@ -45,7 +45,7 @@ export default function QRCodeVendor() {
   }, [dataUserContext, qrcode]);
 
   if (!user || !userAttributes || !qrcode) return;
-  
+
   return (
     <>
       <Button
@@ -75,7 +75,7 @@ export default function QRCodeVendor() {
           <Col span={12} className="text-center">
             <Title level={4}>IOS</Title>
             <Image
-              src={qrcode?.ios ?? ""}
+              src={qrcode.ios}
               alt="QR Code for ios"
               width={200}
               height={200}
@@ -85,7 +85,7 @@ export default function QRCodeVendor() {
           <Col span={12} className="text-center">
             <Title level={4}>ANDROID</Title>
             <Image
-              src={qrcode?.android ?? ""}
+              src={qrcode.android}
               alt="QR Code for android"
               width={200}
               height={200}
@@ -95,11 +95,11 @@ export default function QRCodeVendor() {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {userAttributes?.family_name ?? ""}{" "}
-            {userAttributes?.given_name ?? ""}
+            Vendor: {userAttributes.given_name}{" "}
+            {userAttributes.family_name}
           </Title>
-          <Title level={4}>Phone: {userAttributes?.phone_number ?? ""}</Title>
-          <Title level={4}>ID: {user?.userId ?? ""}</Title>
+          <Title level={4}>Phone: {userAttributes.phone_number}</Title>
+          <Title level={4}>ID: {user.userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>
