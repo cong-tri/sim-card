@@ -39,6 +39,8 @@ export const useTransaction = (manager: Manager) => {
           });
           client.on("info", (data: Transaction[]) => {
             if (!data) return;
+            // else console.log(data);
+            
             resolve(data);
           });
         }
@@ -54,28 +56,10 @@ export const useTransaction = (manager: Manager) => {
   useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
-      // if (!transaction) return;
-      // else return transaction;
-      const transactionAsync: Promise<Transaction[]> = new Promise(
-        (resolve) => {
-          if (!client) return;
-          client.emit("info", {
-            fromDate: "2024-07-16",
-            toDate: "2024-07-25",
-          });
-          client.on("info", (data: Transaction[]) => {
-            if (!data) return;
-            resolve(data);
-          });
-        }
-      );
-      const data = await transactionAsync;
-      setTransaction(data);
-
       if (!transaction) return;
-      else return transaction
+      else return transaction;
     },
-    enabled: !!client,
+    enabled: !!transaction,
   });
 };
 
