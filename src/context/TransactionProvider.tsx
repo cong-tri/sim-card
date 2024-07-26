@@ -26,10 +26,10 @@ export const TransactionProvider = ({
   useEffect(() => {
     if (!data) return;
     else setTransaction(data as Transaction[]);
-  }, [data]);
+  }, [data, transaction]);
 
   return (
-    <TransactionContext.Provider value={transaction ?? []}>
+    <TransactionContext.Provider value={ transaction ?? []}>
       {children}
     </TransactionContext.Provider>
   );

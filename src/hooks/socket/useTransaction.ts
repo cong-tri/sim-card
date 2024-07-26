@@ -7,6 +7,8 @@ import { Transaction } from "@/types/types";
 const queryKey = "transaction";
 
 export const useTransaction = (manager: Manager) => {
+  // console.log("test socket >>");
+  
   const namespace: string = "transaction";
   const socket = useSocketIO(manager, namespace);
 
@@ -27,51 +29,87 @@ export const useTransaction = (manager: Manager) => {
     });
   }, [socket]);
 
-  useEffect(() => {
-    const getTransaction = async () => {
+  // useEffect(() => {
+  //   const getTransaction = async () => {
+  //     // promise function for await get data transaction from query 'transaction'
+  //     const transactionAsync: Promise<Transaction[]> = new Promise(
+  //       (resolve) => {
+  //         if (!client) return;
+  //         client.emit("info", {
+  //           fromDate: "2024-07-17",
+  //           toDate: "2024-07-27",
+  //         });
+  //         client.on("info", (data: Transaction[]) => {
+  //           if (!data) return;
+  //           // else console.log(data);
+  //           resolve(data);
+  //         });
+  //       }
+  //     );
+  //     const data = await transactionAsync;
+  //     // console.log(data);
+
+  //     setTransaction(data);
+
+  //     if (!transaction) return;
+  //     // console.log(transaction);
+  //   };
+  //   getTransaction();
+  // }, [client, transaction]);
+
+  useQuery({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      // date range not exceeded 10 days
+      // Get the current date and time
+      const currentDate = new Date();
+
+      // Calculate the date 10 days ago
+      const tenDaysAgo = new Date();
+      tenDaysAgo.setDate(currentDate.getDate() - 10);
+      
       // promise function for await get data transaction from query 'transaction'
       const transactionAsync: Promise<Transaction[]> = new Promise(
         (resolve) => {
           if (!client) return;
           client.emit("info", {
-            fromDate: "2024-07-16",
-            toDate: "2024-07-25",
+            fromDate: tenDaysAgo,
+            toDate: currentDate,
           });
           client.on("info", (data: Transaction[]) => {
             if (!data) return;
-            // else console.log(data);
-            
             resolve(data);
           });
         }
       );
       const data = await transactionAsync;
+      // console.log(data);
       setTransaction(data);
 
-      if (!transaction) return;
-    };
-    getTransaction();
-  }, [client, transaction]);
-
-  useQuery({
-    queryKey: [queryKey],
-    queryFn: async () => {
-      if (!transaction) return;
-      else return transaction;
+      if (!data) return;
+      return data;
     },
-    enabled: !!transaction,
+    refetchInterval: 1000 * 10,
+    staleTime: Infinity,
+    enabled: !!client,
   });
 };
 
 export const useGetTransactionQuery = () => {
+  // console.log("test get transaction query >>");
+  
   const queryClient = useQueryClient();
   const [transaction, setTransaction] = useState<Transaction[]>();
 
   const getTransactionQuery = async () => {
+    // await queryClient.prefetchQuery({ queryKey: [queryKey] });
+
     // promise function for await get data transaction from query 'transaction'
     const transactionAsync: Promise<Transaction[]> = new Promise((resolve) => {
       const data: any = queryClient.getQueryData([queryKey]);
       if (!data) return;
+      // console.log(data);
+
       resolve(data as Transaction[]);
     });
     const data = await transactionAsync;

@@ -8,13 +8,14 @@ import { ManagerProvider } from "@/context/ManagerProvider";
 import { TransactionProvider } from "@/context/TransactionProvider";
 
 export default async function UserPage() {
+
   return (
     <>
       <ManagerProvider>
         <UserProvider>
           <UserProfile />
         </UserProvider>
-        
+
         <TransactionProvider>
           <UserTransaction />
         </TransactionProvider>

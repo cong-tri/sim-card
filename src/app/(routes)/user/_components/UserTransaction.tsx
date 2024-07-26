@@ -15,8 +15,8 @@ export default function UserTransaction() {
   const [detailTransaction, setDetailTransaction] = useState<any>();
 
   useEffect(() => {
-    if (data.length === 0) return;
-    setTransaction(data as Transaction[]);
+    if (data.length == 0) return;
+    else setTransaction(data as Transaction[]);
   }, [data]);
 
   if (!transaction) return;

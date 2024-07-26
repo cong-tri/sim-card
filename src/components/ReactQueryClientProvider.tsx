@@ -12,7 +12,7 @@ const makeQueryClient = () => {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 60 * 24,
+        staleTime: Infinity,
       },
     },
   });
