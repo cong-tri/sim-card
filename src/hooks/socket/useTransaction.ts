@@ -57,7 +57,7 @@ export const useTransaction = (manager: Manager) => {
       if (!data) return;
       return data;
     },
-    refetchInterval: 1000 * 20,
+    refetchInterval: 1000 * 10,
     staleTime: Infinity,
     enabled: !!client,
   });
