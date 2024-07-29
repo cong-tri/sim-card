@@ -6,6 +6,8 @@ import { Button, List, Modal } from "antd";
 import Title from "antd/es/typography/Title";
 import Typography from "antd/es/typography/Typography";
 import { Transaction } from "@/types/types";
+import moment from "moment";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UserTransaction() {
   const data: any = useContext(TransactionContext);
@@ -13,7 +15,7 @@ export default function UserTransaction() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction[]>();
   const [detailTransaction, setDetailTransaction] = useState<any>();
-
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (data.length == 0) return;
     else setTransaction(data as Transaction[]);
@@ -35,7 +37,7 @@ export default function UserTransaction() {
             ID: {item.id}. <br />
             Product Name: {item.product}. <br />
             Service: {item.service}. <br />
-            Date: {formatDatetime(item.date)}. <br />
+            Date: {moment(item.date).format("MMMM Do YYYY, h:mm:ss a")}. <br />
             Cost: {item.amount} {item.currency}
           </Typography>
         </>
@@ -48,7 +50,22 @@ export default function UserTransaction() {
       <div className="my-8 px-14">
         <List
           size="large"
-          header={<Title>Transaction</Title>}
+          header={
+            <>
+              <Title>Transaction</Title>
+              <Button
+                htmlType="button"
+                type="primary"
+                onClick={async () => {
+                  await queryClient.resetQueries({
+                    queryKey: ["transaction"],
+                  });
+                }}
+              >
+                Refresh
+              </Button>
+            </>
+          }
           itemLayout="horizontal"
           bordered
           dataSource={listTransaction}
@@ -56,47 +73,21 @@ export default function UserTransaction() {
             <List.Item
               key={index}
               actions={[
-                <>
-                  <Button
-                    htmlType="button"
-                    type="primary"
-                    key={index}
-                    onClick={() => {
-                      setIsModalOpen(true);
-                      if (!listTransaction) return;
-                      else {
-                        if (!listTransaction[index].details) return;
-                        else
-                          setDetailTransaction(listTransaction[index].details);
-                      }
-                    }}
-                  >
-                    Read
-                  </Button>
-                  <Modal
-                    title="Transaction Information"
-                    open={isModalOpen}
-                    footer={
-                      <Button
-                        type="primary"
-                        danger
-                        htmlType="button"
-                        onClick={() => {
-                          setIsModalOpen(false);
-                          setDetailTransaction(null);
-                        }}
-                      >
-                        Close
-                      </Button>
+                <Button
+                  htmlType="button"
+                  type="primary"
+                  key={index}
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    if (!listTransaction) return;
+                    else {
+                      if (!listTransaction[index].details) return;
+                      else setDetailTransaction(listTransaction[index].details);
                     }
-                    onCancel={() => {
-                      setIsModalOpen(false);
-                      setDetailTransaction(null);
-                    }}
-                  >
-                    {detailTransaction ?? ""}
-                  </Modal>
-                </>,
+                  }}
+                >
+                  Read
+                </Button>,
               ]}
             >
               <List.Item.Meta
@@ -106,22 +97,30 @@ export default function UserTransaction() {
             </List.Item>
           )}
         />
+        <Modal
+          title="Transaction Information"
+          open={isModalOpen}
+          footer={
+            <Button
+              type="primary"
+              danger
+              htmlType="button"
+              onClick={() => {
+                setIsModalOpen(false);
+                setDetailTransaction(null);
+              }}
+            >
+              Close
+            </Button>
+          }
+          onCancel={() => {
+            setIsModalOpen(false);
+            setDetailTransaction(null);
+          }}
+        >
+          {detailTransaction ?? ""}
+        </Modal>
       </div>
     </>
   );
-}
-
-function formatDatetime(datetime: string | Date) {
-  const date = new Date(datetime);
-  const formattedDate = date.toLocaleString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false, // 24-hour format
-    timeZone: "UTC", // Ensure the time is displayed in UTC
-  });
-  return formattedDate;
 }

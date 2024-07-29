@@ -19,15 +19,11 @@ export default function SignInForm() {
   const router = useRouter();
 
   const onFinish = async ({ username, password }: SignInInput) => {
-    // await signOut({ global: true });
-    // message.success("Successfully")
-
     try {
       const response = await signIn({
         username,
         password,
       });
-      console.log(response);
       
       if (
         response.isSignedIn == true &&

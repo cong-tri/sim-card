@@ -7,13 +7,10 @@ import { Transaction } from "@/types/types";
 const queryKey = "transaction";
 
 export const useTransaction = (manager: Manager) => {
-  // console.log("test socket >>");
-  
   const namespace: string = "transaction";
   const socket = useSocketIO(manager, namespace);
 
   const [client, setClient] = useState<Socket>(socket as Socket);
-  const [transaction, setTransaction] = useState<Transaction[]>();
 
   useEffect(() => {
     socket?.connect();
@@ -28,34 +25,6 @@ export const useTransaction = (manager: Manager) => {
       console.log("err >>", err);
     });
   }, [socket]);
-
-  // useEffect(() => {
-  //   const getTransaction = async () => {
-  //     // promise function for await get data transaction from query 'transaction'
-  //     const transactionAsync: Promise<Transaction[]> = new Promise(
-  //       (resolve) => {
-  //         if (!client) return;
-  //         client.emit("info", {
-  //           fromDate: "2024-07-17",
-  //           toDate: "2024-07-27",
-  //         });
-  //         client.on("info", (data: Transaction[]) => {
-  //           if (!data) return;
-  //           // else console.log(data);
-  //           resolve(data);
-  //         });
-  //       }
-  //     );
-  //     const data = await transactionAsync;
-  //     // console.log(data);
-
-  //     setTransaction(data);
-
-  //     if (!transaction) return;
-  //     // console.log(transaction);
-  //   };
-  //   getTransaction();
-  // }, [client, transaction]);
 
   useQuery({
     queryKey: [queryKey],
@@ -83,13 +52,12 @@ export const useTransaction = (manager: Manager) => {
         }
       );
       const data = await transactionAsync;
-      // console.log(data);
-      setTransaction(data);
+      console.log(data);
 
       if (!data) return;
       return data;
     },
-    refetchInterval: 1000 * 10,
+    refetchInterval: 1000 * 20,
     staleTime: Infinity,
     enabled: !!client,
   });

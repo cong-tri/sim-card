@@ -29,7 +29,7 @@ export const TransactionProvider = ({
   }, [data, transaction]);
 
   return (
-    <TransactionContext.Provider value={ transaction ?? []}>
+    <TransactionContext.Provider value={transaction ?? []}>
       {children}
     </TransactionContext.Provider>
   );
