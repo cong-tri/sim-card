@@ -9,7 +9,7 @@ import Title from "antd/es/typography/Title";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
-import { SignInInput, signIn } from "aws-amplify/auth";
+import { SignInInput, signIn, signOut } from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
@@ -19,26 +19,46 @@ export default function SignInForm() {
   const router = useRouter();
 
   const onFinish = async ({ username, password }: SignInInput) => {
-    try {
-      const response = await signIn({
-        username,
-        password,
-      });
-
-      if (
-        response.isSignedIn == true &&
-        response.nextStep.signInStep === "DONE"
-      ) {
-        message.success("Login Successfully", 2, () => {
-          router.refresh();
-          router.push("/user");
-        });
-      } else {
-        message.error("Username or password is not correct", 2);
-      }
-    } catch (error) {
-      // console.error(error);
-    }
+    await signOut({ global: true });
+    message.success("Successfully")
+    // const response = await signIn({
+    //   username,
+    //   password,
+    // });
+    // console.log(response);
+    
+    // if (
+    //   response.isSignedIn == true &&
+    //   response.nextStep.signInStep === "DONE"
+    // ) {
+    //   message.success("Login Successfully", 2, () => {
+    //     router.refresh();
+    //     router.push("/user");
+    //   });
+    // } else {
+    //   message.error("Username or password is not correct", 2);
+    // }
+    // try {
+    //   const response = await signIn({
+    //     username,
+    //     password,
+    //   });
+    //   console.log(response);
+      
+    //   if (
+    //     response.isSignedIn == true &&
+    //     response.nextStep.signInStep === "DONE"
+    //   ) {
+    //     message.success("Login Successfully", 2, () => {
+    //       router.refresh();
+    //       router.push("/user");
+    //     });
+    //   } else {
+    //     message.error("Username or password is not correct", 2);
+    //   }
+    // } catch (error) {
+    //   // console.error(error);
+    // }
   };
   return (
     <>

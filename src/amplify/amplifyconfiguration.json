@@ -14,9 +14,9 @@
             "profile",
             "aws.cognito.signin.user.admin"
           ],
-          "redirectSignIn": ["http://localhost:3000/"],
-          "redirectSignOut": ["http://localhost:3000/"],
-          "responseType": "code"
+          "redirectSignIn": ["http://localhost:3000/signin"],
+          "redirectSignOut": ["http://localhost:3000/signout"],
+          "responseType": "token"
         },
         "username": "true",
         "email": "false",
