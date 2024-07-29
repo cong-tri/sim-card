@@ -19,46 +19,30 @@ export default function SignInForm() {
   const router = useRouter();
 
   const onFinish = async ({ username, password }: SignInInput) => {
-    await signOut({ global: true });
-    message.success("Successfully")
-    // const response = await signIn({
-    //   username,
-    //   password,
-    // });
-    // console.log(response);
-    
-    // if (
-    //   response.isSignedIn == true &&
-    //   response.nextStep.signInStep === "DONE"
-    // ) {
-    //   message.success("Login Successfully", 2, () => {
-    //     router.refresh();
-    //     router.push("/user");
-    //   });
-    // } else {
-    //   message.error("Username or password is not correct", 2);
-    // }
-    // try {
-    //   const response = await signIn({
-    //     username,
-    //     password,
-    //   });
-    //   console.log(response);
+    // await signOut({ global: true });
+    // message.success("Successfully")
+
+    try {
+      const response = await signIn({
+        username,
+        password,
+      });
+      console.log(response);
       
-    //   if (
-    //     response.isSignedIn == true &&
-    //     response.nextStep.signInStep === "DONE"
-    //   ) {
-    //     message.success("Login Successfully", 2, () => {
-    //       router.refresh();
-    //       router.push("/user");
-    //     });
-    //   } else {
-    //     message.error("Username or password is not correct", 2);
-    //   }
-    // } catch (error) {
-    //   // console.error(error);
-    // }
+      if (
+        response.isSignedIn == true &&
+        response.nextStep.signInStep === "DONE"
+      ) {
+        message.success("Login Successfully", 2, () => {
+          router.refresh();
+          router.push("/user");
+        });
+      } else {
+        message.error("Username or password is not correct", 2);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <>
