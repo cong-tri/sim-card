@@ -23,7 +23,7 @@ export const MainProvider = ({
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     fetchUserAttributes()

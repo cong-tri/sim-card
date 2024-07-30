@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Manager } from "socket.io-client";
 import { useSocketIO } from "./useSocket";
@@ -6,10 +6,14 @@ import { Transaction } from "@/types/types";
 
 const queryKey = "transaction";
 
+var list: Transaction[]
+
 export const useTransaction = (manager: Manager) => {
   const namespace: string = "transaction";
   const socket = useSocketIO(manager, namespace);
   const [transaction, setTransaction] = useState<Transaction[]>();
+  
+  const renderCount = useRef(0);
 
   useEffect(() => {
     socket?.connect();
@@ -18,10 +22,22 @@ export const useTransaction = (manager: Manager) => {
     });
 
     if (!socket) return;
-
+  
     socket.on("info", (data: Transaction[]) => {
       if (!data) return;
-      setTransaction(data);
+
+      renderCount.current++;
+
+      if (renderCount.current === 1) {
+        list = data
+      }
+
+      const combinedList = [...list, ...data];
+      const uniqueList = combinedList.filter(
+        (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+      );
+      
+      setTransaction(uniqueList);
     });
 
     // disconnect_exception: server socket io api of ccsidd extends
@@ -47,14 +63,13 @@ export const useTransaction = (manager: Manager) => {
         fromDate: tenDaysAgo,
         toDate: currentDate,
       });
-      
-      // console.log("emit2 >>>");
 
-      // socket.emit("info", {
-      //   fromDate: "2024-07-17",
-      //   toDate: "2024-07-26",
-      // });
-      // return transaction;
+      socket.emit("info", {
+        fromDate: "2024-07-17",
+        toDate: "2024-07-26",
+      });
+
+      return transaction;
     },
     staleTime: Infinity,
     enabled: !!socket,
