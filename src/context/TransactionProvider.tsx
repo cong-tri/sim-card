@@ -1,36 +1,27 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { ManagerContext } from "./ManagerProvider";
+import React, { createContext, useContext } from "react";
+import { useManagerContext } from "./ManagerProvider";
 import { Manager } from "socket.io-client";
-import {
-  useGetTransactionQuery,
-  useTransaction,
-} from "@/hooks/socket/useTransaction";
+import { useTransaction } from "@/hooks/socket/useTransaction";
 import { Transaction } from "@/types/types";
 
-export const TransactionContext = createContext({});
+const TransactionContext = createContext({} as { transaction?: Transaction[] });
 
 export const TransactionProvider = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const manager = useContext(ManagerContext);
-  useTransaction(manager as Manager);
+  const { manager } = useManagerContext();
 
-  const [transaction, setTransaction] = useState<Transaction[]>();
-
-  const data = useGetTransactionQuery();
-
-  useEffect(() => {
-    if (!data) return;
-    else setTransaction(data as Transaction[]);
-  }, [data, transaction]);
+  const { transaction } = useTransaction(manager as Manager);
 
   return (
-    <TransactionContext.Provider value={transaction ?? []}>
+    <TransactionContext.Provider value={{ transaction }}>
       {children}
     </TransactionContext.Provider>
   );
 };
+
+export const useTransactionContext = () => useContext(TransactionContext);

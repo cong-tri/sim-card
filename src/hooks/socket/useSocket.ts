@@ -30,5 +30,6 @@ export const useSocketIO = (
           console.error(err.message);
         });
   }, [client]);
+  
   return client;
 };

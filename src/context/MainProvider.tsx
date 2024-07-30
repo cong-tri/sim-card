@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 import { CurrentUser, DataMainProvider, UserAttributes } from "@/types/types";
 
-export const MainContext = createContext({});
+const MainContext = createContext({} as { user?: CurrentUser, userAttributes?: UserAttributes });
 
 export const MainProvider = ({
   children,
@@ -15,29 +15,30 @@ export const MainProvider = ({
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getCurrentUser();
+    getCurrentUser()
+      .then((data) => {
+        if (!data) return;
         setUser(data as CurrentUser);
-      } catch (error) {}
-    };
-    fetchUser();
-  }, [user]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   useEffect(() => {
-    const getUserAttributes = async () => {
-      try {
-        const data = await fetchUserAttributes();
-        setUserAttributes(data as UserAttributes);
-      } catch (error) {}
-    };
-    getUserAttributes();
+    fetchUserAttributes()
+      .then((data) => {
+        if (!data) return;
+        setUserAttributes(data as UserAttributes)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [userAttributes]);
 
-  const data: DataMainProvider = {
-    user: user ?? null,
-    userAttributes: userAttributes ?? null,
-  };
-
-  return <MainContext.Provider value={data}>{children}</MainContext.Provider>;
+  return (
+    <MainContext.Provider value={{ user: user ?? undefined, userAttributes: userAttributes ?? undefined }}>{children}</MainContext.Provider>
+  );
 };
+
+export const useMainContext = () => useContext(MainContext);

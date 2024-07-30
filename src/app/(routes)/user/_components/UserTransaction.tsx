@@ -1,125 +1,105 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
-import { TransactionContext } from "@/context/TransactionProvider";
-import { Button, List, Modal } from "antd";
+import React from "react";
+import { useUserContext } from "@/context/UserProvider";
+import { Table, Typography } from "antd";
+import type { TableProps } from "antd";
 import Title from "antd/es/typography/Title";
-import Typography from "antd/es/typography/Typography";
-import { Transaction } from "@/types/types";
 import moment from "moment";
-import { useQueryClient } from "@tanstack/react-query";
+
+const columns: TableProps["columns"] = [
+  {
+    title: "No.",
+    dataIndex: "key",
+    key: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+  },
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
+  },
+  {
+    title: "Status",
+    key: "status",
+    dataIndex: "status",
+  },
+];
+
+const { Text } = Typography;
 
 export default function UserTransaction() {
-  const data: any = useContext(TransactionContext);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transaction, setTransaction] = useState<Transaction[]>();
-  const [detailTransaction, setDetailTransaction] = useState<any>();
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    if (data.length == 0) return;
-    else setTransaction(data as Transaction[]);
-  }, [data]);
-
-  if (!transaction) return;
-
-  const listTransaction = transaction.map((item, index) => {
-    return {
-      key: index,
-      title: item.read
-        ? `Transaction ${index + 1}`
-        : `Transaction ${index + 1} (Unread)`,
-      description: `You purchased ${item.product}, service: ${item.service}.`,
-      details: (
-        <>
-          <Typography>
-            You already have payment a transaction: <br />
-            ID: {item.id}. <br />
-            Product Name: {item.product}. <br />
-            Service: {item.service}. <br />
-            Date: {moment(item.date).format("MMMM Do YYYY, h:mm:ss a")}. <br />
-            Cost: {item.amount} {item.currency}
-          </Typography>
-        </>
-      ),
-    };
-  });
-
+  const { transaction } = useUserContext();
+  
   return (
     <>
       <div className="my-8 px-14">
-        <List
-          size="large"
-          header={
-            <>
-              <Title>Transaction</Title>
-              <Button
-                htmlType="button"
-                type="primary"
-                onClick={async () => {
-                  await queryClient.resetQueries({
-                    queryKey: ["transaction"],
-                  });
-                }}
-              >
-                Refresh
-              </Button>
-            </>
-          }
-          itemLayout="horizontal"
+        <Table
+          columns={columns}
+          dataSource={transaction?.map((item, index) => {
+            return {
+              key: `${index + 1}`,
+              name: item.product,
+              date: moment(item.date).format("MMMM Do YYYY, h:mm:ss a"),
+              amount:
+                item.amount < 0 ? (
+                  <Text type="danger">
+                    {item.amount} {item.currency}
+                  </Text>
+                ) : (
+                  <Text type="success">
+                    +{item.amount} {item.currency}
+                  </Text>
+                ),
+              status: item.read ? (
+                <Text>Read</Text>
+              ) : (
+                <Text type="danger">Unread</Text>
+              ),
+              description: (
+                <>
+                  <Text>
+                    Transaction ID: {item.id}. <br />
+                    Product Name: <Text strong>{item.product}</Text>. <br />
+                    Service: {item.service}. <br />
+                    Date: {moment(item.date).format(
+                      "MMMM Do YYYY, h:mm:ss a"
+                    )}. <br />
+                    Amount:{" "}
+                    {item.amount < 0 ? (
+                      <Text type="danger">
+                        {item.amount} {item.currency}
+                      </Text>
+                    ) : (
+                      <Text type="success">
+                        +{item.amount} {item.currency}
+                      </Text>
+                    )}
+                  </Text>
+                </>
+              ),
+            };
+          })}
           bordered
-          dataSource={listTransaction}
-          renderItem={(item, index) => (
-            <List.Item
-              key={index}
-              actions={[
-                <Button
-                  htmlType="button"
-                  type="primary"
-                  key={index}
-                  onClick={() => {
-                    setIsModalOpen(true);
-                    if (!listTransaction) return;
-                    else {
-                      if (!listTransaction[index].details) return;
-                      else setDetailTransaction(listTransaction[index].details);
-                    }
-                  }}
-                >
-                  Read
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={item.title}
-                description={<Typography>{item.description}</Typography>}
-              />
-            </List.Item>
-          )}
-        />
-        <Modal
-          title="Transaction Information"
-          open={isModalOpen}
-          footer={
-            <Button
-              type="primary"
-              danger
-              htmlType="button"
-              onClick={() => {
-                setIsModalOpen(false);
-                setDetailTransaction(null);
-              }}
-            >
-              Close
-            </Button>
-          }
-          onCancel={() => {
-            setIsModalOpen(false);
-            setDetailTransaction(null);
+          expandable={{
+            expandedRowRender: (record) => (
+              <p style={{ margin: 0 }}>{record.description}</p>
+            ),
+            rowExpandable: (record) => record.name !== "Not Expandable",
           }}
-        >
-          {detailTransaction ?? ""}
-        </Modal>
+          title={() => {
+            return <Title>Transaction</Title>;
+          }}
+        />
       </div>
     </>
   );

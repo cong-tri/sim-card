@@ -1,31 +1,26 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuth, useGetQrcodeQuery } from "@/hooks/socket/useAuth";
-import { ManagerContext } from "./ManagerProvider";
+import React, { createContext, useContext } from "react";
+import { useAuth } from "@/hooks/socket/useAuth";
+import { useTransaction } from "@/hooks/socket/useTransaction";
+import { useManagerContext } from "./ManagerProvider";
 import { Manager } from "socket.io-client";
-import { Qrcode } from "@/types/types";
+import { Qrcode, Transaction } from "@/types/types";
 
-export const UserContext = createContext({});
+const UserContext = createContext({} as { qrcode?: Qrcode, transaction?: Transaction[] });
 
 export const UserProvider = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const manager = useContext(ManagerContext);
-
-  useAuth(manager as Manager);
-
-  const data = useGetQrcodeQuery();
+  const { manager } = useManagerContext();
   
-  const [qrcode, setQRCode] = useState<Qrcode>();
-
-  useEffect(() => {
-    if (!data) return;
-    else setQRCode(data as Qrcode);
-  }, [data, qrcode]);
+  const { qrcode } = useAuth(manager as Manager);
+  const { transaction } = useTransaction(manager as Manager);
 
   return (
-    <UserContext.Provider value={qrcode ?? {}}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ qrcode, transaction }}>{children}</UserContext.Provider>
   );
 };
+
+export const useUserContext = () => useContext(UserContext);

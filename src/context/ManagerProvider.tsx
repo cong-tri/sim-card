@@ -1,9 +1,10 @@
 "use client"
 
 import { manager } from "@/hooks/socket/useManager";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
+import { Manager } from "socket.io-client";
 
-export const ManagerContext = createContext({});
+const ManagerContext = createContext({} as {manager?: Manager});
 
 export const ManagerProvider = ({
     children,
@@ -11,9 +12,10 @@ export const ManagerProvider = ({
     children: React.ReactNode;
   }>) => {
     return (
-      <ManagerContext.Provider value={manager}>
+      <ManagerContext.Provider value={{manager}}>
         {children}
       </ManagerContext.Provider>
     );
   };
-  
+
+export const useManagerContext = () =>  useContext(ManagerContext)

@@ -1,9 +1,9 @@
 /** @format */
 
-import SignInForm from "./SignInForm";
 import Title from "antd/es/typography/Title";
+import SignInForm from "./SignInForm";
 
-export default async function SignIn() {
+export default function SignIn() {
   
   return (
     <>

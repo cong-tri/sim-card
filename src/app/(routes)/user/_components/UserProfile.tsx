@@ -1,36 +1,17 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
-import { MainContext } from "@/context/MainProvider";
-import { CurrentUser, DataMainProvider, UserAttributes } from "@/types/types";
+import React from "react";
 import { Avatar, Button, Col, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined } from "@ant-design/icons";
 import QRCodeVendor from "./QRCodeVendor";
+import { useMainContext } from "@/context/MainProvider";
 
 const { Text } = Typography;
+
 export default function UserProfile() {
-  const dataMainContext = useContext(MainContext);
 
-  const [userAttributes, setUserAttributes] = useState<UserAttributes>();
-  const [user, setUser] = useState<CurrentUser>();
-
-  useEffect(() => {
-    if (!dataMainContext) return;
-    else {
-      const data = dataMainContext as DataMainProvider;
-      if (!data) return;
-      else {
-        if (!data.user || !data.userAttributes) return;
-        else {
-          setUser(data.user);
-          setUserAttributes(data.userAttributes);
-        }
-      }
-    }
-  }, [dataMainContext, user, userAttributes]);
-
-  if (!user || !userAttributes) return;
+  const { user, userAttributes } = useMainContext();
 
   return (
     <>
@@ -49,42 +30,43 @@ export default function UserProfile() {
           <Row align={"top"} gutter={16}>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                UserId: <Text>{user.userId }</Text>
+                UserId: <Text>{user?.userId}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Username: <Text>{user.username }</Text>
+                Username: <Text>{user?.username}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Email Address: <Text>{userAttributes.email }</Text>
+                Email Address: <Text>{userAttributes?.email}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                First Name: <Text>{userAttributes.family_name }</Text>
+                First Name: <Text>{userAttributes?.family_name}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Last Name: <Text>{userAttributes.given_name }</Text>
+                Last Name: <Text>{userAttributes?.given_name}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Phone Number: <Text>{userAttributes.phone_number }</Text>
+                Phone Number:{" "}
+                <Text>{userAttributes?.phone_number}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Zone Info: <Text>{userAttributes.zoneinfo }</Text>
+                Zone Info: <Text>{userAttributes?.zoneinfo}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Locale: <Text>{userAttributes.locale }</Text>
+                Locale: <Text>{userAttributes?.locale}</Text>
               </Title>
             </Col>
           </Row>
@@ -96,7 +78,8 @@ export default function UserProfile() {
               Vendor
             </Title>
             <Title level={4}>
-              {userAttributes.given_name} {userAttributes.family_name}
+              {userAttributes?.given_name}{" "}
+              {userAttributes?.family_name}
             </Title>
             <QRCodeVendor />
             <br />

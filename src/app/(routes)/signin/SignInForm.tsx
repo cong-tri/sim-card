@@ -23,6 +23,11 @@ export default function SignInForm() {
       const response = await signIn({
         username,
         password,
+        options: {
+          clientMetadata: {
+            uuid: "tesst",
+          },
+        },
       });
       
       if (
@@ -38,6 +43,9 @@ export default function SignInForm() {
       }
     } catch (error) {
       console.error(error);
+      message.error(
+        "Please log out other advices. Please reset and try it again!"
+      );
     }
   };
   return (

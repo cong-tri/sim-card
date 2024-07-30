@@ -1,13 +1,12 @@
 /** @format */
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 import { Menu, message } from "antd";
 import {
-  HomeOutlined,
   LoginOutlined,
   LogoutOutlined,
   ProfileOutlined,
@@ -16,39 +15,29 @@ import {
 import { Amplify } from "aws-amplify";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import outputs from "@/amplify/amplifyconfiguration.json";
-import { getCurrentUser, signOut } from "aws-amplify/auth";
-import { MainContext } from "@/context/MainProvider";
-import { CurrentUser, DataMainProvider } from "@/types/types";
+import { signOut } from "aws-amplify/auth";
+import { useMainContext } from "@/context/MainProvider";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
-  const dataMainContext = useContext(MainContext);
+  const { user } = useMainContext();
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const [user, setUser] = useState<CurrentUser | null>();
-  const [current, setCurrent] = useState<string>(!user ? "/signin" : pathname);
+  const currentPath = pathname.replace("/", "");
+
+  const [current, setCurrent] = useState<string>(
+    !user ? "signin" : currentPath
+  );
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(!currentUser ? null : (currentUser as CurrentUser));
-        setCurrent(!currentUser ? "/signin" : pathname);
-      } catch (error) {
-        setCurrent("/signin")
-        setUser(null)
-      }
-    };
-    fetchUser();
-
+    setCurrent(!user ? "signin" : currentPath);
     router.refresh();
-    router.push(pathname);
-  }, [router, pathname]);
+  }, [currentPath, router, user]);
 
   const menuItems: MenuItem[] = [
     {
@@ -58,14 +47,14 @@ const MenuItems: React.FC = () => {
       children: !user
         ? [
             {
-              key: "/signin",
+              key: "signin",
               label: <Link href={"/signin"}>Sign In</Link>,
               icon: <LoginOutlined />,
             },
           ]
         : [
             {
-              key: "/user",
+              key: "user",
               label: <Link href={"/user"}>DashBoard User</Link>,
               icon: <ProfileOutlined />,
             },
@@ -84,8 +73,7 @@ const MenuItems: React.FC = () => {
     if (e.key == "signout") {
       await signOut({ global: true });
 
-      setUser(null);
-      setCurrent("/signin");
+      setCurrent("signin");
 
       message.success("Log out success", 2, () => {
         router.refresh();

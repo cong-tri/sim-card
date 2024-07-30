@@ -14,11 +14,8 @@ export default async function UserPage() {
       <ManagerProvider>
         <UserProvider>
           <UserProfile />
-        </UserProvider>
-
-        <TransactionProvider>
           <UserTransaction />
-        </TransactionProvider>
+        </UserProvider>
       </ManagerProvider>
     </>
   );
