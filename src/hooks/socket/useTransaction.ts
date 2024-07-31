@@ -64,12 +64,12 @@ export const useTransaction = (manager: Manager) => {
         toDate: currentDate,
       });
 
-      socket.emit("info", {
-        fromDate: "2024-07-17",
-        toDate: "2024-07-26",
-      });
+      // socket.emit("info", {
+      //   fromDate: "2024-07-17",
+      //   toDate: "2024-07-26",
+      // });
 
-      return transaction;
+      // return transaction;
     },
     staleTime: Infinity,
     enabled: !!socket,

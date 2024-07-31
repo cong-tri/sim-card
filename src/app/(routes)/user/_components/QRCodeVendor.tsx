@@ -11,7 +11,7 @@ const { Text } = Typography;
 
 export default function QRCodeVendor() {
   const { qrcode } = useUserContext();
-  const { user, userAttributes } = useMainContext();
+  const { data } = useMainContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -53,10 +53,10 @@ export default function QRCodeVendor() {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {userAttributes?.given_name} {userAttributes?.family_name}
+            Vendor: {data?.userAttributes?.given_name} {data?.userAttributes?.family_name}
           </Title>
-          <Title level={4}>Phone: {userAttributes?.phone_number}</Title>
-          <Title level={4}>ID: {user?.userId}</Title>
+          <Title level={4}>Phone: {data?.userAttributes?.phone_number}</Title>
+          <Title level={4}>ID: {data?.user?.userId}</Title>
         </div>
         <Row gutter={20} align={"middle"} justify={"center"} className="mt-5">
           <Col>

@@ -23,7 +23,7 @@ Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 type MenuItem = Required<MenuProps>["items"][number];
 
 const MenuItems: React.FC = () => {
-  const { user } = useMainContext();
+  const { data } = useMainContext();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -31,20 +31,20 @@ const MenuItems: React.FC = () => {
   const currentPath = pathname.replace("/", "");
 
   const [current, setCurrent] = useState<string>(
-    !user ? "signin" : currentPath
+    !data?.user ? "signin" : currentPath
   );
 
   useEffect(() => {
-    setCurrent(!user ? "signin" : currentPath);
+    setCurrent(!data?.user ? "signin" : currentPath);
     router.refresh();
-  }, [currentPath, router, user]);
+  }, [currentPath, router, data]);
 
   const menuItems: MenuItem[] = [
     {
       key: "account",
       label: "User",
       icon: <UserOutlined />,
-      children: !user
+      children: !data?.user
         ? [
             {
               key: "signin",
@@ -74,7 +74,7 @@ const MenuItems: React.FC = () => {
       await signOut({ global: true });
 
       setCurrent("signin");
-
+      
       message.success("Log out success", 2, () => {
         router.refresh();
         router.push("/signin");

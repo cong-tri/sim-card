@@ -10,8 +10,7 @@ import { useMainContext } from "@/context/MainProvider";
 const { Text } = Typography;
 
 export default function UserProfile() {
-
-  const { user, userAttributes } = useMainContext();
+  const { data } = useMainContext();
 
   return (
     <>
@@ -30,43 +29,42 @@ export default function UserProfile() {
           <Row align={"top"} gutter={16}>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                UserId: <Text>{user?.userId}</Text>
+                UserId: <Text>{data?.user?.userId}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Username: <Text>{user?.username}</Text>
+                Username: <Text>{data?.user?.username}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Email Address: <Text>{userAttributes?.email}</Text>
+                Email Address: <Text>{data?.userAttributes?.email}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                First Name: <Text>{userAttributes?.family_name}</Text>
+                First Name: <Text>{data?.userAttributes?.family_name}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Last Name: <Text>{userAttributes?.given_name}</Text>
+                Last Name: <Text>{data?.userAttributes?.given_name}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Phone Number:{" "}
-                <Text>{userAttributes?.phone_number}</Text>
+                Phone Number: <Text>{data?.userAttributes?.phone_number}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Zone Info: <Text>{userAttributes?.zoneinfo}</Text>
+                Zone Info: <Text>{data?.userAttributes?.zoneinfo}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Locale: <Text>{userAttributes?.locale}</Text>
+                Locale: <Text>{data?.userAttributes?.locale}</Text>
               </Title>
             </Col>
           </Row>
@@ -78,8 +76,8 @@ export default function UserProfile() {
               Vendor
             </Title>
             <Title level={4}>
-              {userAttributes?.given_name}{" "}
-              {userAttributes?.family_name}
+              {data?.userAttributes?.given_name}{" "}
+              {data?.userAttributes?.family_name}
             </Title>
             <QRCodeVendor />
             <br />
