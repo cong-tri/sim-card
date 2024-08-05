@@ -14,29 +14,29 @@ export const MainProvider = ({
   const [user, setUser] = useState<CurrentUser | null>();
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>();
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser as CurrentUser);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getUser();
-  }, [user]);
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     try {
+  //       const currentUser = await getCurrentUser();
+  //       setUser(currentUser as CurrentUser);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   getUser();
+  // }, [user]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await fetchUserAttributes();
-        setUserAttributes(user as UserAttributes);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUser();
-  }, [userAttributes]);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const user = await fetchUserAttributes();
+  //       setUserAttributes(user as UserAttributes);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [userAttributes]);
 
   const data: DataMainProvider = {
     user: user ?? null,

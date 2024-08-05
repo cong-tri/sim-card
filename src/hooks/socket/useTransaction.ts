@@ -6,13 +6,13 @@ import { Transaction } from "@/types/types";
 
 const queryKey = "transaction";
 
-var list: Transaction[]
+var list: Transaction[];
 
 export const useTransaction = (manager: Manager) => {
   const namespace: string = "transaction";
   const socket = useSocketIO(manager, namespace);
   const [transaction, setTransaction] = useState<Transaction[]>();
-  
+
   const renderCount = useRef(0);
 
   useEffect(() => {
@@ -22,21 +22,28 @@ export const useTransaction = (manager: Manager) => {
     });
 
     if (!socket) return;
-  
+
     socket.on("info", (data: Transaction[]) => {
       if (!data) return;
 
       renderCount.current++;
 
       if (renderCount.current === 1) {
-        list = data
+        console.log("render", renderCount.current);
+        console.log(data);
+
+        list = data;
+      } else {
+        console.log("render", renderCount.current);
+        console.log(data);
+        list.push(data[0])
       }
 
       const combinedList = [...list, ...data];
       const uniqueList = combinedList.filter(
         (item, index, self) => index === self.findIndex((t) => t.id === item.id)
       );
-      
+
       setTransaction(uniqueList);
     });
 
@@ -64,17 +71,11 @@ export const useTransaction = (manager: Manager) => {
         toDate: currentDate,
       });
 
-      // socket.emit("info", {
-      //   fromDate: "2024-07-17",
-      //   toDate: "2024-07-26",
-      // });
-
-      // return transaction;
+      return transaction;
     },
     staleTime: Infinity,
     enabled: !!socket,
   });
 
-  return {transaction};
+  return { transaction };
 };
-

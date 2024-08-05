@@ -49,7 +49,7 @@ export default function UserTransaction() {
             return {
               key: `${index + 1}`,
               name: item.product,
-              date: moment(item.date).format("MMMM Do YYYY, h:mm:ss a"),
+              date: moment(item.date).format("MMMM Do YYYY, h:mm:ss A"),
               amount:
                 item.amount < 0 ? (
                   <Text type="danger">

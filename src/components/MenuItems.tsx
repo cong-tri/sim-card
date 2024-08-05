@@ -72,9 +72,7 @@ const MenuItems: React.FC = () => {
 
     if (e.key == "signout") {
       await signOut({ global: true });
-
       setCurrent("signin");
-      
       message.success("Log out success", 2, () => {
         router.refresh();
         router.push("/signin");
