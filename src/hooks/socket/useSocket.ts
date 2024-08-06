@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { Manager, Socket } from "socket.io-client";
 import { fetchAuthSession } from "aws-amplify/auth";
 

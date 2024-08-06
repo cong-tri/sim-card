@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Manager, Socket } from "socket.io-client";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Manager } from "socket.io-client";
 import { useSocketIO } from "./useSocket";
 import { Qrcode } from "@/types/types";
 
 const queryKey = "qrcode";
 
 export const useAuth = (manager: Manager) => {
-  const queryClient = useQueryClient();
 
   const namespace: string = "auth";
   const socket = useSocketIO(manager, namespace);

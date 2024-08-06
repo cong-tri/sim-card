@@ -9,13 +9,7 @@ import Title from "antd/es/typography/Title";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
-import {
-  SignInInput,
-  SignInOutput,
-  confirmSignIn,
-  rememberDevice,
-  signIn,
-} from "aws-amplify/auth";
+import { SignInOutput, confirmSignIn, signIn } from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
 import Typography from "antd/es/typography/Typography";
