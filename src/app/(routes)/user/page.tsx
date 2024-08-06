@@ -7,7 +7,6 @@ import { UserProvider } from "@/context/UserProvider";
 import { ManagerProvider } from "@/context/ManagerProvider";
 
 export default async function UserPage() {
-
   return (
     <>
       <ManagerProvider>
