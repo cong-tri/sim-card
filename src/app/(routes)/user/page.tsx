@@ -5,7 +5,6 @@ import UserProfile from "./_components/UserProfile";
 import UserTransaction from "./_components/UserTransaction";
 import { UserProvider } from "@/context/UserProvider";
 import { ManagerProvider } from "@/context/ManagerProvider";
-import { TransactionProvider } from "@/context/TransactionProvider";
 
 export default async function UserPage() {
 
