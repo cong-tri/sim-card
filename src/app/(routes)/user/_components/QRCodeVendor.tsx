@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useCallQrcodeQuery } from "@/hooks/socket/useAuth";
+// import { useCallQrcodeQuery } from "@/hooks/socket/useAuth";
 import { Button, Col, Modal, QRCode, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { useUserContext } from "@/context/UserProvider";
 import { useMainContext } from "@/context/MainProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 const { Text } = Typography;
 
@@ -16,11 +17,16 @@ export default function QRCodeVendor() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
 
+  const queryClient = useQueryClient();
   return (
     <>
       <Button
-        onClick={() => {
-          useCallQrcodeQuery;
+        onClick={async () => {
+          await queryClient.refetchQueries({
+            queryKey: ["qrcode"],
+            type: "active",
+          });
+
           setIsModalOpen(true);
         }}
       >
@@ -53,7 +59,8 @@ export default function QRCodeVendor() {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {data?.userAttributes?.given_name} {data?.userAttributes?.family_name}
+            Vendor: {data?.userAttributes?.given_name}{" "}
+            {data?.userAttributes?.family_name}
           </Title>
           <Title level={4}>Phone: {data?.userAttributes?.phone_number}</Title>
           <Title level={4}>ID: {data?.user?.userId}</Title>

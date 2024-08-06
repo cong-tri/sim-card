@@ -13,6 +13,7 @@ import {
   SignInInput,
   SignInOutput,
   confirmSignIn,
+  rememberDevice,
   signIn,
 } from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
@@ -51,7 +52,13 @@ export default function SignInForm() {
     return () => clearInterval(timerId);
   }, [timeLeft, isModalOpen]);
 
-  const onFinish = async ({ username, password }: {username: string, password: string}) => {
+  const onFinish = async ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
     const myuuid = uuidv4(); // uuid device
     setUUID(myuuid);
 
@@ -67,7 +74,8 @@ export default function SignInForm() {
           },
         },
       });
-      
+      console.log(response);
+      setOutPut(response);
       setIsModalOpen(true);
     } catch (error) {
       console.error(error);
@@ -100,12 +108,10 @@ export default function SignInForm() {
     }
   };
 
-  const handleSignInNextSteps = async ({ otpCode }: {otpCode: string}) => {
+  const handleSignInNextSteps = async ({ otpCode }: { otpCode: string }) => {
     if (output?.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_SMS_CODE") {
       try {
         await confirmSignIn({ challengeResponse: otpCode });
-        console.log("success");
-
         setValid(true);
 
         message.success("Login Successfully", 2, () => {
@@ -180,7 +186,13 @@ export default function SignInForm() {
         width={300}
         open={isModal}
         onOk={() => setIsModal(true)}
-        onCancel={() => setIsModal(false)}
+        onCancel={() => {
+          if (!valid) {
+            message.error("Please submit the OTP code to close");
+            return;
+          }
+          setIsModal(false);
+        }}
         footer={
           <>
             <Button

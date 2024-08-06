@@ -29,20 +29,20 @@ export const useTransaction = (manager: Manager) => {
       renderCount.current++;
 
       if (renderCount.current === 1) {
-        console.log("render", renderCount.current);
-        console.log(data);
-
+        console.log(`render ${renderCount.current} >>` , data);
         list = data;
       } else {
-        console.log("render", renderCount.current);
-        console.log(data);
-        list.push(data[0])
+        console.log("list >>", list);
+        console.log(`render ${renderCount.current} >>` , data);
+        list.push(...data)
       }
 
-      const combinedList = [...list, ...data];
-      const uniqueList = combinedList.filter(
+      const uniqueList = list.filter(
         (item, index, self) => index === self.findIndex((t) => t.id === item.id)
       );
+      // const uniqueList = combinedList.filter(
+      //   (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+      // );
 
       setTransaction(uniqueList);
     });
@@ -70,12 +70,12 @@ export const useTransaction = (manager: Manager) => {
         fromDate: tenDaysAgo,
         toDate: currentDate,
       });
-
+      
       return transaction;
     },
     staleTime: Infinity,
     enabled: !!socket,
   });
-
+  
   return { transaction };
 };

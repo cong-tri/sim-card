@@ -39,13 +39,14 @@ const { Text } = Typography;
 
 export default function UserTransaction() {
   const { transaction } = useUserContext();
-  
+  // in order to show the latest transaction into layout
+  const reserveTransaction = [...transaction ?? []].reverse()
   return (
     <>
       <div className="my-8 px-14">
         <Table
           columns={columns}
-          dataSource={transaction?.map((item, index) => {
+          dataSource={reserveTransaction?.map((item, index) => {
             return {
               key: `${index + 1}`,
               name: item.product,

@@ -12,8 +12,6 @@ export const useAuth = (manager: Manager) => {
   const namespace: string = "auth";
   const socket = useSocketIO(manager, namespace);
 
-  const [qrcode, setQrcode] = useState<Qrcode>();
-
   useEffect(() => {
     socket?.connect();
     socket?.on("connect", () => {
@@ -28,9 +26,9 @@ export const useAuth = (manager: Manager) => {
     });
   }, [socket]);
 
-  useQuery({
+  const { data } = useQuery({
     queryKey: [queryKey],
-    queryFn: async () => {  
+    queryFn: async () => {
       // promise function for await get data qrcode from query 'qrcode'
       const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
         if (!socket) return;
@@ -40,32 +38,11 @@ export const useAuth = (manager: Manager) => {
         });
       });
       const data = await qrCodeAsync;
-      setQrcode(data)
-      return data
+      return data;
     },
     staleTime: Infinity,
     enabled: !!socket,
   });
-
-  // const getQrcodeQuery = async () => {
-  //   const qrCodeAsync: Promise<Qrcode> = new Promise((resolve) => {
-  //     const data: any = queryClient.getQueryData([queryKey]);
-  //     if (!data) return;
-  //     resolve(data as Qrcode);
-  //   });
-  //   const data = await qrCodeAsync;
-  //   if (!data) return;
-  //   setQrcode(data);
-  // };
-
-  // getQrcodeQuery();
-  return {qrcode};
+  return { qrcode: data };
 };
 
-export const useCallQrcodeQuery = () => {
-  const queryClient = useQueryClient();
-  const callQuery = async () => {
-    await queryClient.prefetchQuery({ queryKey: [queryKey] });
-  };
-  callQuery();
-};
