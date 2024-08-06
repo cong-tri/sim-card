@@ -35,6 +35,7 @@ export const useTransaction = (manager: Manager) => {
         console.log("list >>", list);
         console.log(`render ${renderCount.current} >>` , data);
         list.push(...data)
+        console.log("list >>", list);
       }
 
       const uniqueList = list.filter(
