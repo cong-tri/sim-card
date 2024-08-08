@@ -61,7 +61,8 @@ export default function QRCodeVendor() {
         </Row>
         <div className="w-full block mx-auto rounded-2xl p-4 bg-gray-100 text-center">
           <Title>
-            Vendor: {data?.userAttributes?.given_name} {data?.userAttributes?.family_name}
+            Vendor: {data?.userAttributes?.given_name}{" "}
+            {data?.userAttributes?.family_name}
           </Title>
           <Title level={4}>Phone: {data?.userAttributes?.phone_number}</Title>
           <Title level={4}>ID: {data?.currentUser?.userId ?? ""}</Title>

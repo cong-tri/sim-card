@@ -1,7 +1,6 @@
 /** @format */
 
 import React from "react";
-import { cookies } from "next/headers";
 
 import UserProfile from "./_components/UserProfile";
 import UserTransaction from "./_components/UserTransaction";
