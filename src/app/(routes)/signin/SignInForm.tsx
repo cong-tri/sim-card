@@ -6,14 +6,13 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Form, Input, message, Modal } from "antd";
 import Title from "antd/es/typography/Title";
+import Typography from "antd/es/typography/Typography";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import { SignInOutput, confirmSignIn, signIn } from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
-import Typography from "antd/es/typography/Typography";
-
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type Account = {
@@ -23,7 +22,6 @@ type Account = {
 
 export default function SignInForm() {
   const [form] = Form.useForm();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [valid, setValid] = useState(false);
