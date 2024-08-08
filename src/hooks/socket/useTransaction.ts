@@ -29,20 +29,17 @@ export const useTransaction = (manager: Manager) => {
       renderCount.current++;
 
       if (renderCount.current === 1) {
-        console.log(`render ${renderCount.current} >>` , data);
+        // console.log(`render ${renderCount.current} >>` , data);
         list = data;
       } else {
-        console.log(`render ${renderCount.current} >>` , data);
+        // console.log(`render ${renderCount.current} >>` , data);
         list.push(...data)
       }
 
       const uniqueList = list.filter(
         (item, index, self) => index === self.findIndex((t) => t.id === item.id)
       );
-      // const uniqueList = combinedList.filter(
-      //   (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-      // );
-
+      
       setTransaction(uniqueList);
     });
 

@@ -17,12 +17,13 @@ import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { signOut } from "aws-amplify/auth";
 import { useMainContext } from "@/context/MainProvider";
+import { CurrentUser } from "@/types/types";
 
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const MenuItems: React.FC = () => {
+const MenuItems = () => {
   const { data } = useMainContext();
 
   const router = useRouter();
@@ -31,11 +32,11 @@ const MenuItems: React.FC = () => {
   const currentPath = pathname.replace("/", "");
 
   const [current, setCurrent] = useState<string>(
-    !data?.user ? "signin" : currentPath
+    !data?.currentUser ? "signin" : currentPath
   );
 
   useEffect(() => {
-    setCurrent(!data?.user ? "signin" : currentPath);
+    setCurrent(!data?.currentUser ? "signin" : currentPath);
     router.refresh();
   }, [currentPath, router, data]);
 
@@ -44,7 +45,7 @@ const MenuItems: React.FC = () => {
       key: "account",
       label: "User",
       icon: <UserOutlined />,
-      children: !data?.user
+      children: !data?.currentUser
         ? [
             {
               key: "signin",

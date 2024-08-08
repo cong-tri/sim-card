@@ -66,6 +66,6 @@ export type CurrentUser = {
 
 // type format MainProvider for data of UserProvider
 export type DataMainProvider = {
-  user: CurrentUser | null;
-  userAttributes: UserAttributes | null;
+  currentUser: CurrentUser | undefined;
+  userAttributes: UserAttributes | undefined;
 };

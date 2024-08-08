@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
+
+import { useMainContext } from "@/context/MainProvider";
+
 import { Avatar, Button, Col, Row, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { UserOutlined } from "@ant-design/icons";
+
 import QRCodeVendor from "./QRCodeVendor";
-import { useMainContext } from "@/context/MainProvider";
 
 const { Text } = Typography;
 
@@ -29,12 +32,12 @@ export default function UserProfile() {
           <Row align={"top"} gutter={16}>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                UserId: <Text>{data?.user?.userId}</Text>
+                UserId: <Text>{data?.currentUser?.userId}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
               <Title level={4}>
-                Username: <Text>{data?.user?.username}</Text>
+                Username: <Text>{data?.currentUser?.username}</Text>
               </Title>
             </Col>
             <Col xs={24} md={12} lg={8}>
@@ -76,8 +79,7 @@ export default function UserProfile() {
               Vendor
             </Title>
             <Title level={4}>
-              {data?.userAttributes?.given_name}{" "}
-              {data?.userAttributes?.family_name}
+              {data?.userAttributes?.given_name} {data?.userAttributes?.family_name}
             </Title>
             <QRCodeVendor />
             <br />
