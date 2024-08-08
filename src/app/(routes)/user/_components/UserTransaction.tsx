@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useUserContext } from "@/context/UserProvider";
 
@@ -43,12 +43,19 @@ const { Text } = Typography;
 export default function UserTransaction() {
   const { transaction } = useUserContext();
 
+  const [totalAmount, setTotalAmount] = useState<number>();
+
   // in order to show the latest transaction into layout
   const reserveTransaction = [...(transaction ?? [])].reverse();
-  const totalAmount = reserveTransaction.reduce(
-    (total, transaction) => total + transaction.amount,
-    0
-  );
+
+  useEffect(() => {
+    const total = transaction?.reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
+    setTotalAmount(total);
+  }, [transaction]);
+
   return (
     <>
       <div className="my-8 px-14">
@@ -66,7 +73,9 @@ export default function UserTransaction() {
               ),
 
               status: (
-                <Text type={item.read ? "secondary" : "danger"}>{item.read ? "Read" : "Unread"}</Text>
+                <Text type={item.read ? "secondary" : "danger"}>
+                  {item.read ? "Read" : "Unread"}
+                </Text>
               ),
               description: (
                 <>
@@ -117,8 +126,8 @@ export default function UserTransaction() {
                   Total amount within 10 days
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1} colSpan={5}>
-                  <Text type={totalAmount < 0 ? "danger" : "success"}>
-                    {totalAmount} VND
+                  <Text type={totalAmount ?? 0 < 0 ? "danger" : "success"}>
+                    {totalAmount ?? 0} VND
                   </Text>
                 </Table.Summary.Cell>
               </Table.Summary.Row>
