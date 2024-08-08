@@ -114,7 +114,7 @@ export default function UserTransaction() {
               </Table.Summary.Row>
               <Table.Summary.Row>
                 <Table.Summary.Cell index={0} colSpan={2}>
-                  Total Amount
+                  Total Amount within 10 days
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1} colSpan={5}>
                   <Text type={totalAmount < 0 ? "danger" : "success"}>
