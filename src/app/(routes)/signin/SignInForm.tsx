@@ -13,6 +13,7 @@ import { AmplifyOutputs } from "aws-amplify/adapter-core";
 import { SignInOutput, confirmSignIn, signIn } from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
+
 Amplify.configure(outputs as AmplifyOutputs, { ssr: true });
 
 type Account = {
@@ -78,30 +79,39 @@ export default function SignInForm() {
     }
   };
 
-  const handleContinueToSignin = async () => {
-    console.log("account >>", account);
+  const handleReturnOutputSignin = async () => {
     try {
-      const response = await signIn({
+      const output = await signIn({
         username: account?.username ?? "",
         password: account?.password,
         options: {
           clientMetadata: {
-            uuid: uuid ?? "",
+            uuid: uuid ?? "123456",
             mfaMethod: "EMAIL",
           },
         },
       });
-      if (response.isSignedIn === false) {
-        setOutPut(response);
-        setIsModalOpen(true);
-      }
+      return output;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleContinueToSignin = async () => {
+    try {
+      const output = await handleReturnOutputSignin();
+      setOutPut(output);
+      setIsModalOpen(true);
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleSignInNextSteps = async ({ otpCode }: { otpCode: string }) => {
-    if (output?.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_SMS_CODE") {
+    if (
+      output?.isSignedIn === false &&
+      output?.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_SMS_CODE"
+    ) {
       try {
         await confirmSignIn({ challengeResponse: otpCode });
         setValid(true);
@@ -122,16 +132,7 @@ export default function SignInForm() {
 
   const handleResendOTPCode = async () => {
     try {
-      await signIn({
-        username: account?.username ?? "",
-        password: account?.password,
-        options: {
-          clientMetadata: {
-            uuid: uuid ?? "",
-            mfaMethod: "EMAIL",
-          },
-        },
-      });
+      await handleReturnOutputSignin();
       setTimeLeft(30);
     } catch (error) {
       console.error(error);

@@ -29,10 +29,8 @@ export const useTransaction = (manager: Manager) => {
       renderCount.current++;
 
       if (renderCount.current === 1) {
-        // console.log(`render ${renderCount.current} >>` , data);
         list = data;
       } else {
-        // console.log(`render ${renderCount.current} >>` , data);
         list.push(...data)
       }
 

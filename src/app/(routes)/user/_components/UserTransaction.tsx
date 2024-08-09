@@ -56,6 +56,12 @@ export default function UserTransaction() {
     setTotalAmount(total);
   }, [transaction]);
 
+  const currentDate = new Date();
+
+  // Calculate the date 10 days ago
+  const tenDaysAgo = new Date();
+  tenDaysAgo.setDate(currentDate.getDate() - 10);
+
   return (
     <>
       <div className="my-8 px-14">
@@ -118,7 +124,7 @@ export default function UserTransaction() {
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1} colSpan={5}>
                   This is a list of transactions from the previous 10 days to
-                  the current date.
+                  the current date. ({tenDaysAgo.toDateString()} - {currentDate.toDateString()})
                 </Table.Summary.Cell>
               </Table.Summary.Row>
               <Table.Summary.Row>
