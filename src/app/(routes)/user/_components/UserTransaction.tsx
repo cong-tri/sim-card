@@ -124,7 +124,7 @@ export default function UserTransaction() {
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1} colSpan={5}>
                   This is a list of transactions from the previous 10 days to
-                  the current date. ({tenDaysAgo.toDateString()} - {currentDate.toDateString()})
+                  the current date. ({tenDaysAgo.toLocaleDateString()} - {currentDate.toLocaleDateString()})
                 </Table.Summary.Cell>
               </Table.Summary.Row>
               <Table.Summary.Row>
