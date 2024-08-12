@@ -10,7 +10,12 @@ import Typography from "antd/es/typography/Typography";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify/amplifyconfiguration.json";
 import { AmplifyOutputs } from "aws-amplify/adapter-core";
-import { SignInOutput, confirmSignIn, signIn } from "aws-amplify/auth";
+import {
+  AuthError,
+  SignInOutput,
+  confirmSignIn,
+  signIn,
+} from "aws-amplify/auth";
 import { FieldTypeSignin } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -72,10 +77,18 @@ export default function SignInForm() {
       setIsModalOpen(true);
     } catch (error) {
       console.error(error);
-      message.error(
-        "You have already logged in another device. Please LOG OUT all of devices and try it again!",
-        () => setIsModal(true)
-      );
+
+      if (error instanceof AuthError) {
+        if (error.message.includes("[DUPLICATED_DEVICE]")) {
+          setIsModal(true);
+        } else {
+          message.error(error.message);
+        }
+      }
+      // message.error(
+      //   "You have already logged in another device. Please LOG OUT all of devices and try it again!",
+      //   () => setIsModal(true)
+      // );
     }
   };
 
@@ -94,6 +107,9 @@ export default function SignInForm() {
       return output;
     } catch (error) {
       console.error(error);
+      if (error instanceof AuthError) {
+        message.error(error.message);
+      }
     }
   };
 
@@ -101,9 +117,12 @@ export default function SignInForm() {
     try {
       const output = await handleReturnOutputSignin();
       setOutPut(output);
-      setIsModalOpen(true);
+      if (output?.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_SMS_CODE")
+        setIsModalOpen(true);
     } catch (error) {
-      console.error(error);
+      if (error instanceof AuthError) {
+        message.error(error.message);
+      }
     }
   };
 
@@ -122,6 +141,11 @@ export default function SignInForm() {
         });
       } catch (error) {
         console.error(error);
+
+        if (error instanceof AuthError) {
+          message.error(error.message);
+        }
+
         message.error(
           "Invalid OTP code! Please enter the latest and correct OTP code!",
           2
@@ -179,13 +203,7 @@ export default function SignInForm() {
         width={300}
         open={isModal}
         onOk={() => setIsModal(true)}
-        onCancel={() => {
-          if (!valid) {
-            message.error("Please submit the OTP code to close");
-            return;
-          }
-          setIsModal(false);
-        }}
+        onCancel={() => setIsModal(false)}
         footer={
           <>
             <Button
